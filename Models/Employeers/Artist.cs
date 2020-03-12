@@ -8,7 +8,7 @@ namespace OXG.CRM_System.Models.Employeers
     /// <summary>
     /// Класс сотрудника непосредственно работающего на мероприятии
     /// </summary>
-    public class Artist : AbstractEmployeer
+    public class Artist : User
     {
         public List<Costume> Costumes { get; set; }
 

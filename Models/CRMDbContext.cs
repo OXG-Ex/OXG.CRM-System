@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Models.Employeers;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OXG.CRM_System.Models
 {
-    public class CRMDbContext : DbContext
+    public class CRMDbContext : IdentityDbContext
     {
         public CRMDbContext(DbContextOptions<CRMDbContext> options) : base(options)
         {
@@ -21,8 +22,6 @@ namespace OXG.CRM_System.Models
         public DbSet<Printer> Printers { get; set; }
 
         public DbSet<Technic> Technics { get; set; }
-
-        public DbSet<Account> Accounts { get; set; }
 
         public DbSet<Certificate> Certificates { get; set; }
 
@@ -39,7 +38,5 @@ namespace OXG.CRM_System.Models
         public DbSet<Mission> Missions { get; set; }
 
         public DbSet<Requisite> Requisites { get; set; }
-
-        public DbSet<Role> Roles { get; set; }
     }
 }

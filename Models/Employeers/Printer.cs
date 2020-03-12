@@ -8,7 +8,7 @@ namespace OXG.CRM_System.Models.Employeers
     /// <summary>
     /// Класс сотрудника отвечающего за заказ и изготовление печатной продукции
     /// </summary>
-    public class Printer : AbstractEmployeer
+    public class Printer : User
     {
         public List<Layout> Layouts { get; set; }
     }

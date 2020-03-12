@@ -20,7 +20,7 @@ namespace OXG.CRM_System.Models
         public string MissionType { get; set; }
 
         public int EmployeerId { get; set; }
-        public AbstractEmployeer Employeer { get; set; }
+        public User Employeer { get; set; }
 
         public int EventId { get; set; }
         public Event Event { get; set; }

@@ -8,7 +8,7 @@ namespace OXG.CRM_System.Models.Employeers
     /// <summary>
     /// Класс сотрудника отвечающего за работу с клиентами
     /// </summary>
-    public class Manager : AbstractEmployeer
+    public class Manager : User
     {
         public List<Client> Clients { get; set; }
 

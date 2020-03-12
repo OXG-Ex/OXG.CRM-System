@@ -8,7 +8,7 @@ namespace OXG.CRM_System.Models.Employeers
     /// <summary>
     /// Класс для сотрудника ответственного за реквизит, аппаратуру и техническое согласование
     /// </summary>
-    public class Technic : AbstractEmployeer
+    public class Technic : User
     {
         public List<Equipment> Equipment { get; set; }
 

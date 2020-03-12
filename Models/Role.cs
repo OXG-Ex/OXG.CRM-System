@@ -11,11 +11,11 @@ namespace OXG.CRM_System.Models
 
         public int Name { get; set; }
 
-        public List<AbstractEmployeer> Employeers { get; set; }
+        public List<User> Employeers { get; set; }
 
         public Role()
         {
-            Employeers = new List<AbstractEmployeer>();
+            Employeers = new List<User>();
         }
     }
 }
