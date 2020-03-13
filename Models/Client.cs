@@ -14,6 +14,7 @@ namespace OXG.CRM_System.Models
 
         public string Phone { get; set; }
 
+        public int? ManagerId { get; set; }
         public Manager Manager { get; set; }
     }
 }

@@ -20,12 +20,16 @@ namespace OXG.CRM_System.Models
 
         public string EventType { get; set; }
 
+        public int? ClientId { get; set; }
         public Client Client { get; set; }
 
+        public int? ManagerId { get; set; }
         public Manager Manager { get; set; }
 
+        public int? TechnicId { get; set; }
         public Technic Technic { get; set; }
 
+        public int? PrinterId { get; set; }
         public Printer Printer { get; set; }
 
         public List<Artist> Artists { get; set; }
