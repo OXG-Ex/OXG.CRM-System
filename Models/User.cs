@@ -14,6 +14,5 @@ namespace OXG.CRM_System.Models
 
         public List<Mission> Missions { get; set; }
         
-        //public List<Event> Events { get; set; }
     }
 }

@@ -4,9 +4,17 @@
 
     <div class="text-center">
         <h1 class="display-4">Welcome</h1>
-        <p> <a asp-action="Register" asp-controller="Account">Регистрация</a>.</p>
-        <p> <a asp-action="Login" asp-controller="Account">Вход</a></p>
-       
+
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Администратор"))
+        {
+            <p> <a asp-action="Index" asp-controller="Roles">Управление ролями</a></p>
+        }
+
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Менеджер"))
+        {
+            <p> <a asp-action="Personal" asp-controller="Manager">Кабинет менеджера</a></p>
+        }
+
         @if (User.Identity.IsAuthenticated)
         {
             <h1>@User.Identity.Name</h1>

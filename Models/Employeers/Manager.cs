@@ -13,5 +13,7 @@ namespace OXG.CRM_System.Models.Employeers
         public List<Client> Clients { get; set; }
 
         public List<Contract> Contracts { get; set; }
+
+        public List<Event> Events { get; set; }
     }
 }

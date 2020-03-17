@@ -16,6 +16,10 @@ namespace OXG.CRM_System.Models
 
         public DateTime DeadLine { get; set; }
 
+        public string Description { get; set; }
+
+        public string Adress { get; set; }
+
         public List<Mission> Missions { get; set; }
 
         public string EventType { get; set; }
@@ -32,6 +36,7 @@ namespace OXG.CRM_System.Models
         public int? PrinterId { get; set; }
         public Printer Printer { get; set; }
 
-        public List<Artist> Artists { get; set; }
+        public int ArtistId { get; set; }
+        public Artist Artist { get; set; }
     }
 }

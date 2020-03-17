@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Models;
 using OXG.CRM_System.Models.Employeers;
 using OXG.CRM_System.ViewModels;
@@ -15,21 +19,35 @@ namespace OXG.CRM_System.Controllers
         CRMDbContext db;
         UserManager<User> userManager;
         SignInManager<User> signInManager;
-        public AccountController(UserManager<User> _userManager, SignInManager<User> _signInManager, CRMDbContext context)
+        IWebHostEnvironment _appEnvironment;
+        public AccountController(UserManager<User> _userManager, SignInManager<User> _signInManager, CRMDbContext context, IWebHostEnvironment appEnvironment)
         {
             db = context;
             userManager = _userManager;
             signInManager = _signInManager;
+            _appEnvironment = appEnvironment;
         }
 
         public IActionResult Index()
         {
-            return RedirectToAction("Login");
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login");
+            }
+            return RedirectToAction("Index","Home");
         }
+
+        
 
         public IActionResult Login()
         {
             return View();
+        }
+
+        public async Task <IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -67,16 +85,16 @@ namespace OXG.CRM_System.Controllers
                 switch (model.UserType)
                 {
                     case "Менеджер":
-                        user = new Manager() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
+                        user = new Manager() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo= "/images/defaultPhoto.png" };
                         break;
                     case "Техник":
-                        user = new Technic() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
+                        user = new Technic() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo = "/images/defaultPhoto.png" };
                         break;
-                    case "Печатник":
-                        user = new Printer() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
+                    case "Дизайнер":
+                        user = new Printer() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo = "/images/defaultPhoto.png" };
                         break;
                     case "Артист":
-                        user = new Artist() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
+                        user = new Artist() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo = "/images/defaultPhoto.png" };
                         break;
                 }
 
@@ -84,6 +102,7 @@ namespace OXG.CRM_System.Controllers
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await userManager.AddToRoleAsync(user, model.UserType);
                     // установка куки
                     await signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
