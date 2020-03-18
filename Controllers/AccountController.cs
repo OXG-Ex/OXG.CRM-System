@@ -91,7 +91,7 @@ namespace OXG.CRM_System.Controllers
                         user = new Technic() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo = "/images/defaultPhoto.png" };
                         break;
                     case "Дизайнер":
-                        user = new Printer() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo = "/images/defaultPhoto.png" };
+                        user = new Designer() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo = "/images/defaultPhoto.png" };
                         break;
                     case "Артист":
                         user = new Artist() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo = "/images/defaultPhoto.png" };

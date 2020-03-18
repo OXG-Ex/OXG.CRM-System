@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Models;
+using OXG.CRM_System.Models.Employeers;
 
 namespace OXG.CRM_System.Controllers
 {
@@ -22,9 +23,11 @@ namespace OXG.CRM_System.Controllers
             db = context;
             _appEnvironment = appEnvironment;
         }
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var user = await db.Managers.Include(e => e.Missions).Include(e => e.Clients).Include(e => e.Contracts).Include(e => e.Events).Where(e => e.Email == User.Identity.Name).FirstOrDefaultAsync();
+            return View(user);
         }
 
         public IActionResult ChangePhoto()
@@ -33,16 +36,12 @@ namespace OXG.CRM_System.Controllers
         }
 
 
-        ///image/jpeg
         [HttpPost]
         public async Task<IActionResult> ChangePhoto(IFormFile uploadedFile)
         {
             if (uploadedFile != null && uploadedFile.ContentType.Contains("image"))
             {
-                // путь к папке Files
-                var ttt = uploadedFile.ContentType;
                 var path = "/AccountPhotos/" + uploadedFile.FileName;
-                //сохраняем файл в папку Files в каталоге wwwroot
                 using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                 {
                     await uploadedFile.CopyToAsync(fileStream);
@@ -60,6 +59,20 @@ namespace OXG.CRM_System.Controllers
         {
             var user = await db.Managers.Include(e => e.Missions).Include(e => e.Clients).Include(e => e.Contracts).Include(e => e.Events).Where(e => e.Email == User.Identity.Name).FirstOrDefaultAsync();
             return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveChanges(Manager manager)
+        {
+            var temp = await db.Managers.Where(e => e.Email == User.Identity.Name && e.UserName == User.Identity.Name).FirstOrDefaultAsync();
+            //db.Entry(temp).State = EntityState.Modified;
+            manager.Id = temp.Id;
+            manager.Photo = temp.Photo;
+            manager.UserName = temp.UserName;
+            manager.PasswordHash = temp.PasswordHash;
+            db.Entry(temp).CurrentValues.SetValues(manager);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Personal","Manager");
         }
     }
 }

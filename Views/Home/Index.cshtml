@@ -13,6 +13,7 @@
         @if (User.Identity.IsAuthenticated && User.IsInRole("Менеджер"))
         {
             <p> <a asp-action="Personal" asp-controller="Manager">Кабинет менеджера</a></p>
+            <p> <a asp-action="Index" asp-controller="Manager">Рабочая зона менеджера</a></p>
         }
 
         @if (User.Identity.IsAuthenticated)

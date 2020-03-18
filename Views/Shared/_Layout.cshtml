@@ -38,10 +38,10 @@
             }
         </nav>
     </header>
-    <div class="container">
-        @*<main role="main" class="pb-3">*@
+    <div class="container" id="LayoutContainer">
+        <main role="main" class="pb-3">
             @RenderBody()
-        @*</main>*@
+        </main>
     </div>
 
     <footer class="border-top footer text-muted">
@@ -53,5 +53,14 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+    <script>
+        $('#editButton').click(function () {
+            $("#Nstatic").removeAttr("readonly");
+            $("#Nstatic1").removeAttr("readonly");
+            $("#Nstatic2").removeAttr("readonly");
+            $("#saveButton").removeAttr("hidden");
+            $("#editButton").attr("hidden","");
+        });
+    </script>
 </body>
 </html>

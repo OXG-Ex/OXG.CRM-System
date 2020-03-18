@@ -16,7 +16,7 @@ namespace OXG.CRM_System.Models
 
         public decimal Price { get; set; }
 
-        public int? TechnicId { get; set; }
+        public string? TechnicId { get; set; }
         public Technic Technic { get; set; }
     }
 }

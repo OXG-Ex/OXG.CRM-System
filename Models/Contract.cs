@@ -14,13 +14,13 @@ namespace OXG.CRM_System.Models
 
         public DateTime CreatedDate { get; set; }
 
-        public int EventId { get; set; }
+        public int? EventId { get; set; }
         public Event Event { get; set; }
 
-        public int ClientId { get; set; }
+        public int? ClientId { get; set; }
         public Client Client { get; set; }
 
-        public int ManagerId { get; set; }
+        public string? ManagerId { get; set; }
         public Manager Manager { get; set; }
     }
 }

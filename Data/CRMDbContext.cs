@@ -19,7 +19,7 @@ namespace OXG.CRM_System.Models
 
         public DbSet<Manager> Managers { get; set; }
 
-        public DbSet<Printer> Printers { get; set; }
+        public DbSet<Designer> Printers { get; set; }
 
         public DbSet<Technic> Technics { get; set; }
 

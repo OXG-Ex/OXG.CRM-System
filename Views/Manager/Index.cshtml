@@ -1,0 +1,97 @@
+﻿@model OXG.CRM_System.Models.Employeers.Manager
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class=" col-lg-6">
+        <a asp-action="New" asp-controller="Events" type="button" class="btn btn-success btn-lg btn-block">Создать мероприятие</a>
+        <div class="card border-success mb-3 ">
+            <div class="card-header">События</div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Наименование</th>
+                            <th scope="col">Дата проведения</th>
+                            <th scope="col">Статус</th>
+                            <th scope="col">Клиент</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Events != null && Model.Clients != null)
+                        {
+                            @foreach (var item in Model.Events)
+                            {
+                                <tr>
+                                    <th scope="row"><a asp-action="Edit" asp-controller="Events" asp-route-id="@item.Id">@item.Name</a></th>
+                                    <td>@item.DeadLine.ToLongDateString()</td>
+                                    <td>@item.Status</td>
+                                    <td><a asp-action="View" asp-controller="Clients" asp-route-id="@item.Client.Id">@item.Client.Name</a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class=" col-lg-6">
+        <a asp-action="New" asp-controller="Missions" type="button" class="btn btn-info btn-lg btn-block">Создать задачу</a>
+        <div class="card border-info mb-3 ">
+            <div class="card-header">Задачи</div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col"><img src="~/images/icons/Help.png" alt="type" width="25" height="25" /></th>
+                            <th scope="col">Описание</th>
+                            <th scope="col">Дедлайн</th>
+                            <th scope="col">Завершить</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Missions != null)
+                        {
+                            @foreach (var item in Model.Missions)
+                            {
+                                <tr>
+                                    @switch (item.MissionType)
+                                    {
+                                        case "Звонок":
+                                            <td><img src="~/images/icons/Phone.png" alt="type" width="25" height="25" /></td>
+                                            break;
+                                        case "Email":
+                                            <td><img src="~/images/icons/Email.png" alt="type" width="25" height="25" /></td>
+                                            break;
+                                        case "Договор":
+                                            <td><img src="~/images/icons/Note.png" alt="type" width="25" height="25" /></td>
+                                            break;
+                                        case "Утверждение макета":
+                                            <td><img src="~/images/icons/Copy.png" alt="type" width="25" height="25" /></td>
+                                            break;
+                                        case "Создание задачи":
+                                            <td><img src="~/images/icons/Copy.png" alt="type" width="25" height="25" /></td>
+                                            break;
+                                        default:
+                                            <td><img src="~/images/icons/Check Box.png" alt="type" width="25" height="25" /></td>
+                                            break;
+                                    }
+                                    <td>@item.MissionText</td>
+                                    <td>@item.DeadLine.ToLongDateString()</td>
+                                    <td><a asp-action="CloseMission" asp-controller="Manager" asp-route-id="@item.Id">Завершить</a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var container = document.getElementById('LayoutContainer')
+    container.classList.remove('container')
+</script>

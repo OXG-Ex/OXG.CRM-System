@@ -19,6 +19,6 @@ namespace OXG.CRM_System.Models
         public string PSD { get; set; }
 
         public int PrinterId { get; set; }
-        public Printer Printer { get; set; }
+        public Designer Printer { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace OXG.CRM_System.Models
 
         public string Scan { get; set; }
 
-        public int TechnicId { get; set; }
+        public string TechnicId { get; set; }
         public Technic Technic { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace OXG.CRM_System.Models
 {
     public class Costume : Equipment
     {
-        public int ArtistId { get; set; }
+        public string ArtistId { get; set; }
         public Artist Artist { get; set; }
     }
 }

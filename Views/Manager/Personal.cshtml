@@ -4,76 +4,80 @@
 }
 
 <h1>Личные данные</h1>
+<form asp-action="SaveChanges">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card border-primary mb-3">
+                <div class="card-header"><a align="center" asp-action="ChangePhoto" asp-controller="Manager"><img align="middle" class="img-fluid rounded-lg mx-auto d-block img-thumbnail" src="@Model.Photo" alt="Установите фото профиля" style="max-width:300px; height:auto " /></a></div>
+                <div class="card-body">
+                    <h4 class="card-title"><input asp-for="Name" readonly="" class="form-control" id="Nstatic2"></h4>
+                </div>
+            </div>
+            <div class="card border-primary mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Клиенты:</h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Имя</th>
+                                <th scope="col">Телефон</th>
+                                <th scope="col">Email</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model.Clients)
+                        {
+                            <tr class="table-primary">
+                                <th scope="row">@item.Name</th>
+                                <td>@item.Phone</td>
+                                <td>@item.Email</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card border-primary mb-3">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-3 col-form-label">Email</label>
+                        <div class="col-sm-9">
+                            <input asp-for="Email" readonly="" class="form-control-plaintext" id="Nstatic">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-3 col-form-label">Номер телефона:</label>
+                        <div class="col-sm-9">
+                            <input asp-for="PhoneNumber" readonly="" class="form-control-plaintext" id="Nstatic1">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-3 col-form-label">Должность</label>
+                        <div class="col-sm-9">
+                            <input readonly="" class="form-control-plaintext" id="static" value="Менеджер">
+                        </div>
+                    </div>
+                    @* TODO: Добавить редактирование модели через JS *@
+                    @* TODO: Добавить переход в соответствующие контроллеры через месседжи *@
+                    <div class="form-group row">
+                        <div class="alert alert-dismissible alert-info col-md-4">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Текущих задач: </strong>@Model.Missions.Count
+                        </div>
+                        <div class="alert alert-dismissible alert-info col-md-4">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Мероприятий: </strong>@Model.Events.Count
+                        </div>
+                        <div class="alert alert-dismissible alert-info col-md-4">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Клиентов: </strong>@Model.Clients.Count
+                        </div>
+                        <input asp-action="SaveChanges" hidden="" type="submit" class="btn btn-outline-success" id="saveButton" value="Сохранить" />
+                    </div>
+                </div>
 
-<div class="row">
-    <div class="col-md-5">
-        <div class="card border-primary mb-3">
-            <div class="card-header"><a align="center" asp-action="ChangePhoto" asp-controller="Manager"><img align="middle" class="img-fluid rounded-lg mx-auto d-block img-thumbnail" src="@Model.Photo" alt="Установите фото профиля"  style="max-width:300px; height:auto "/></a></div>
-            <div class="card-body">
-                <h4 class="card-title">@Model.Name</h4>
-            </div>
-        </div>
-        <div class="card border-primary mb-3">
-            <div class="card-body">
-                <h4 class="card-title">Клиенты:</h4>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Имя</th>
-                            <th scope="col">Телефон</th>
-                            <th scope="col">Email</th>
-                        </tr>
-                    </thead>
-                    @foreach (var item in Model.Clients)
-                    {
-                        <tr class="table-primary">
-                            <th scope="row">@item.Name</th>
-                            <td>@item.Phone</td>
-                            <td>@item.Email</td>
-                        </tr>
-                    }
-                </table>
             </div>
         </div>
     </div>
-    <div class="col-md-7">
-        <div class="card border-primary mb-3">
-            <div class="card-body">
-                <div class="form-group row">
-                    <label for="staticEmail" class="col-sm-3 col-form-label">Email</label>
-                    <div class="col-sm-9">
-                        <input asp-for="Email" readonly="" class="form-control-plaintext" id="Nstatic">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="staticEmail" class="col-sm-3 col-form-label">Номер телефона:</label>
-                    <div class="col-sm-9">
-                        <input asp-for="PhoneNumber" readonly="" class="form-control-plaintext" id="Nstatic">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="staticEmail" class="col-sm-3 col-form-label">Должность</label>
-                    <div class="col-sm-9">
-                        <input readonly="" class="form-control-plaintext" id="static" value="Менеджер">
-                    </div>
-                </div>
-                @* TODO: Добавить редактирование модели через JS *@
-                @* TODO: Добавить переход в соответствующие контроллеры через месседжи *@
-                <div class="form-group row">
-                    <div class="alert alert-dismissible alert-info col-md-4">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <strong>Текущих задач: </strong>@Model.Missions.Count
-                    </div>
-                    <div class="alert alert-dismissible alert-info col-md-4">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <strong>Мероприятий: </strong>@Model.Events.Count
-                    </div>
-                    <div class="alert alert-dismissible alert-info col-md-4">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <strong>Клиентов: </strong>@Model.Clients.Count
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</form>
+<button class="btn btn-primary" id="editButton">Редактировать информацию</button>

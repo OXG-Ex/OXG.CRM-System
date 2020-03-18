@@ -1,4 +1,5 @@
 ﻿using OXG.CRM_System.Models.Employeers;
+using OXG.CRM_System.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,22 @@ namespace OXG.CRM_System.Models
 
         public string Email { get; set; }
 
-        public string Adress { get; set; }
+        public string Description { get; set; }
 
-        public int? ManagerId { get; set; }
+        public string? ManagerId { get; set; }
         public Manager Manager { get; set; }
+
+        public Client(CreateEventVM model)
+        {
+            Name = model.ClientName;
+            Phone = model.ClientPhone;
+            Email = model.ClientEmail;
+            Description = model.ClientDescription;
+        }
+
+        public Client()
+        {
+
+        }
     }
 }
