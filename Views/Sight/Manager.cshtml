@@ -1,0 +1,43 @@
+﻿@model OXG.CRM_System.Models.Employeers.Manager
+@{
+    ViewData["Title"] = "Manager";
+}
+
+<h1>@Model.Name</h1>
+
+<table class="table table-hover table-striped">
+    <tr>
+        <td>
+            <label for="Email" class="col-sm-3 col-form-label">Email:</label>
+            <div class="col-sm-9">
+                <input asp-for="Email" readonly="" class="form-control-plaintext" id="Email">
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="PhoneNumber" class="col-sm-3 col-form-label">Номер телефона:</label>
+            <div class="col-sm-9">
+                <input asp-for="PhoneNumber" readonly="" class="form-control-plaintext" id="PhoneNumber">
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+
+            <label for="Events" class="col-sm-3 col-form-label">Текущих мероприятий:</label>
+            <div class="col-sm-9">
+                <input value="@Model.Events.Where(e => e.Status !="Завершено").Count()" readonly="" class="form-control-plaintext" id="Events">
+            </div>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="Clients" class="col-sm-3 col-form-label">Клиентов:</label>
+            <div class="col-sm-9">
+                <input value="@Model.Clients.Count()" readonly="" class="form-control-plaintext" id="Clients">
+            </div>
+        </td>
+    </tr>
+</table>

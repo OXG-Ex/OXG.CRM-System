@@ -24,9 +24,13 @@ namespace OXG.CRM_System.Models
 
         public string Adress { get; set; }
 
-        public List<Mission> Missions { get; set; }
+        public decimal TotalPrice { get; set; }
 
         public string EventType { get; set; }
+
+        public List<Mission> Missions { get; set; }
+
+        public List<Work> Works { get; set; }
 
         [ForeignKey("Client")]
         public int? ClientId { get; set; }
@@ -43,10 +47,6 @@ namespace OXG.CRM_System.Models
         [ForeignKey("Technic")]
         public string? TechnicId { get; set; }
         public Technic Technic { get; set; }
-
-        [ForeignKey("Designer")]
-        public string? DesignerId { get; set; }
-        public Designer Designer { get; set; }
 
         [ForeignKey("Artist")]
         public string? ArtistId { get; set; }

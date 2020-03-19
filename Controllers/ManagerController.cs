@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Models;
 using OXG.CRM_System.Models.Employeers;
 
+
 namespace OXG.CRM_System.Controllers
 {
     [Authorize(Roles = "Менеджер")]
@@ -65,12 +66,9 @@ namespace OXG.CRM_System.Controllers
         public async Task<IActionResult> SaveChanges(Manager manager)
         {
             var temp = await db.Managers.Where(e => e.Email == User.Identity.Name && e.UserName == User.Identity.Name).FirstOrDefaultAsync();
-            //db.Entry(temp).State = EntityState.Modified;
-            manager.Id = temp.Id;
-            manager.Photo = temp.Photo;
-            manager.UserName = temp.UserName;
-            manager.PasswordHash = temp.PasswordHash;
-            db.Entry(temp).CurrentValues.SetValues(manager);
+            temp.Name = manager.Name;
+            temp.PhoneNumber = manager.PhoneNumber;
+            temp.Email = manager.Email;
             await db.SaveChangesAsync();
             return RedirectToAction("Personal","Manager");
         }

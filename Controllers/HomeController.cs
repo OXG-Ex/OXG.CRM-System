@@ -27,7 +27,7 @@ namespace OXG.CRM_System.Controllers
 
         public async Task<IActionResult> Index()
         {
-            await DbInitializer.InitializeAsync(userManager, roleManager);
+            await DbInitializer.InitializeAsync(userManager, roleManager, db);
             return View();
         }
 

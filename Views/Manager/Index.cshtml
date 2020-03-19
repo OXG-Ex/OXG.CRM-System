@@ -4,11 +4,11 @@
 }
 
 <div class="row">
-    <div class=" col-lg-6">
+    <div class=" col-lg-5">
         <a asp-action="New" asp-controller="Events" type="button" class="btn btn-success btn-lg btn-block">Создать мероприятие</a>
         <div class="card border-success mb-3 ">
             <div class="card-header">События</div>
-            <div class="card-body">
+            <div class="card-body table-responsive" style="max-height:400px">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -24,7 +24,7 @@
                             @foreach (var item in Model.Events)
                             {
                                 <tr>
-                                    <th scope="row"><a asp-action="Edit" asp-controller="Events" asp-route-id="@item.Id">@item.Name</a></th>
+                                    <th scope="row"><a asp-action="View" asp-controller="Events" asp-route-id="@item.Id">@item.Name</a></th>
                                     <td>@item.DeadLine.ToLongDateString()</td>
                                     <td>@item.Status</td>
                                     <td><a asp-action="View" asp-controller="Clients" asp-route-id="@item.Client.Id">@item.Client.Name</a></td>
@@ -36,18 +36,18 @@
             </div>
         </div>
     </div>
-    <div class=" col-lg-6">
-        <a asp-action="New" asp-controller="Missions" type="button" class="btn btn-info btn-lg btn-block">Создать задачу</a>
+    <div class="col-lg-7">
+        <a asp-action="New" asp-controller="Mission" type="button" class="btn btn-info btn-lg btn-block">Создать задачу</a>
         <div class="card border-info mb-3 ">
             <div class="card-header">Задачи</div>
-            <div class="card-body">
-                <table class="table table-hover">
+            <div class="card-body table-responsive" style="max-height:400px">
+                <table class="table table-hover" >
                     <thead>
                         <tr>
                             <th scope="col"><img src="~/images/icons/Help.png" alt="type" width="25" height="25" /></th>
                             <th scope="col">Описание</th>
                             <th scope="col">Дедлайн</th>
-                            <th scope="col">Завершить</th>
+                            <th scope="col">Закрыть</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,13 +73,16 @@
                                         case "Создание задачи":
                                             <td><img src="~/images/icons/Copy.png" alt="type" width="25" height="25" /></td>
                                             break;
+                                        case "Указать сотрудников":
+                                            <td><img src="~/images/icons/Run.png" alt="type" width="25" height="25" /></td>
+                                            break;
                                         default:
                                             <td><img src="~/images/icons/Check Box.png" alt="type" width="25" height="25" /></td>
                                             break;
                                     }
                                     <td>@item.MissionText</td>
-                                    <td>@item.DeadLine.ToLongDateString()</td>
-                                    <td><a asp-action="CloseMission" asp-controller="Manager" asp-route-id="@item.Id">Завершить</a></td>
+                                    <td>@item.DeadLine.ToShortDateString(), @item.DeadLine.ToShortTimeString()</td>
+                                    <td><a asp-action="Close" asp-controller="Mission" asp-route-id="@item.Id">Закрыть</a></td>
                                 </tr>
                             }
                         }

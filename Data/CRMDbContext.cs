@@ -19,8 +19,6 @@ namespace OXG.CRM_System.Models
 
         public DbSet<Manager> Managers { get; set; }
 
-        public DbSet<Designer> Printers { get; set; }
-
         public DbSet<Technic> Technics { get; set; }
 
         public DbSet<Certificate> Certificates { get; set; }
@@ -33,9 +31,9 @@ namespace OXG.CRM_System.Models
 
         public DbSet<Event> Events { get; set; }
 
-        public DbSet<Layout> Layouts { get; set; }
-
         public DbSet<Mission> Missions { get; set; }
+
+        public DbSet<Work> Works { get; set; }
 
         public DbSet<Requisite> Requisites { get; set; }
     }

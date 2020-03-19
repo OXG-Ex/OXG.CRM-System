@@ -1,0 +1,95 @@
+﻿@model OXG.CRM_System.Models.Event
+@{
+    ViewData["Title"] = "Мероприятие";
+}
+
+<h1>@Model.Name</h1>
+
+<table class="table table-hover table-striped">
+    <tr>
+        <th scope="row">Название:</th>
+        <td>@Model.Name</td>
+    </tr>
+    <tr>
+        <th scope="row">Описание:</th>
+        <td>@Model.Description</td>
+    </tr>
+    <tr>
+        <th scope="row">Статус:</th>
+        <td>@Model.Status</td>
+    </tr>
+    <tr>
+        <th scope="row">Тип мероприятия:</th>
+        <td>@Model.EventType</td>
+    </tr>
+    <tr>
+        <th scope="row">Место проведения:</th>
+        <td>@Model.Adress</td>
+    </tr>
+    <tr>
+        <th scope="row">Дата проведения:</th>
+        <td>@Model.DeadLine.ToLongDateString()</td>
+    </tr>
+    <tr>
+        <th scope="row">Время начала:</th>
+        <td>@Model.DeadLine.ToShortTimeString()</td>
+    </tr>
+    <tr>
+        <th scope="row">Дата поступления:</th>
+        <td>@Model.CreatedDate.ToShortDateString()</td>
+    </tr>
+    @if (Model.Contract != null)
+    {
+        <tr>
+            <th scope="row">Договор:</th>
+            <td><a asp-controller="Sight" asp-action="Contract" asp-route-id="@Model.Contract.Id">Договор об оказании услуг от @Model.Contract.CreatedDate.ToShortDateString()</a></td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <th scope="row">Договор:</th>
+            <td><a asp-controller="Contract" asp-action="Create">Создать</a></td>
+        </tr>
+    }
+
+    <tr>
+        <th scope="row">Менеджер:</th>
+        <td><a asp-controller="Sight" asp-action="Manager" asp-route-id="@Model.Manager.Id">@Model.Manager.Name</a></td>
+    </tr>
+    <tr>
+        <th scope="row">Клиент:</th>
+        <td><a asp-controller="Sight" asp-action="Client" asp-route-id="@Model.Client.Id">@Model.Client.Name</a></td>
+    </tr>
+
+    @if (Model.Technic != null)
+    {
+        <tr>
+            <th scope="row">Техник:</th>
+            <td><a asp-controller="Sight" asp-action="Technic" asp-route-id="@Model.Technic.Id">@Model.Technic.Name</a></td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <th scope="row">Техник:</th>
+            <td><a asp-controller="Technic" asp-action="AddToEvent" asp-route-id="@Model.Id">Указать</a></td>
+        </tr>
+    }
+
+    @if (Model.Artist != null)
+    {
+        <tr>
+            <th scope="row">Главный артист:</th>
+            <td><a asp-controller="Sight" asp-action="Artist" asp-route-id="@Model.Artist.Id">@Model.Artist.Name</a></td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <th scope="row">Главный артист:</th>
+            <td><a asp-controller="Artist" asp-action="AddToEvent" asp-route-id="@Model.Id">Указать</a></td>
+        </tr>
+    }
+
+</table>

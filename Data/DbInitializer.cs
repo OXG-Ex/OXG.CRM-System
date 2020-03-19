@@ -10,13 +10,29 @@ namespace OXG.CRM_System.Data
 {
     public class DbInitializer
     {
-        public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, CRMDbContext db)
         {
             string adminEmail = "admin@admin.com";
             string password = "Admin_123";
 
             string managerEmail = "manager212@gmail.com";
             string managerPassword = "Manager_123";
+
+            if (db.Works == null)
+            {
+                await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Жасмин'", Price = 5500 });
+                await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Человек-дракон'", Price = 7500 });
+                await db.Works.AddAsync(new Work() { Name = "Пиротехническое шоу 'SuperNova'", Price = 8500 });
+                await db.Works.AddAsync(new Work() { Name = "Шоу Тесла", Price = 10000 });
+                await db.Works.AddAsync(new Work() { Name = "Светодиодное шоу", Price = 3500 });
+                await db.Works.AddAsync(new Work() { Name = "Аниматор", Price = 3000 });
+                await db.Works.AddAsync(new Work() { Name = "Ведущий", Price = 5000 });
+                await db.Works.AddAsync(new Work() { Name = "Ходулисты", Price = 3000 });
+                await db.Works.AddAsync(new Work() { Name = "Фрик шоу", Price = 5000 });
+                await db.Works.AddAsync(new Work() { Name = "Молекулярное шоу", Price = 6500 });
+                await db.Works.AddAsync(new Work() { Name = "Танцовщицы", Price = 3500 });
+                await db.SaveChangesAsync();
+            }
 
             if (await roleManager.FindByNameAsync("Администратор") == null)
             {

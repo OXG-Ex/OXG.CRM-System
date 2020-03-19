@@ -38,7 +38,15 @@
             }
         </nav>
     </header>
+
     <div class="container" id="LayoutContainer">
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Задача:</strong> @ViewBag.Message.
+            </div>
+        }
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
