@@ -11,6 +11,10 @@ namespace OXG.CRM_System.Models
 
         public string Name { get; set; }
 
+        public int Num { get; set; }
+
         public decimal Price { get; set; }
+
+        public decimal Sum { get => Num * Price; }
     }
 }

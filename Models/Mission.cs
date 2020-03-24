@@ -15,7 +15,7 @@ namespace OXG.CRM_System.Models
 
         public DateTime CreatedDate { get; set; }
 
-        public string Result { get; set; }
+        public string Status { get; set; }
 
         public string MissionType { get; set; }
 

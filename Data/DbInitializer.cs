@@ -18,6 +18,9 @@ namespace OXG.CRM_System.Data
             string managerEmail = "manager212@gmail.com";
             string managerPassword = "Manager_123";
 
+            string technicEmail = "technic212@gmail.com";
+            string technicPassword = "Technic_123";
+
             if (db.Works == null)
             {
                 await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Жасмин'", Price = 5500 });
@@ -72,11 +75,21 @@ namespace OXG.CRM_System.Data
 
             if (await userManager.FindByNameAsync(managerEmail) == null)
             {
-                Manager manager = new Manager { Email = managerEmail, UserName = managerEmail, Name ="Менеджер Тест Тест" };
+                Manager manager = new Manager { Email = managerEmail, UserName = managerEmail, Name ="Менеджер Тест Тест", Photo = "/images/defaultPhoto.png" };
                 IdentityResult result = await userManager.CreateAsync(manager, managerPassword);
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(manager, "Менеджер");
+                }
+            }
+
+            if (await userManager.FindByNameAsync(technicEmail) == null)
+            {
+                Technic technic = new Technic { Email = technicEmail, UserName = technicEmail, Name = "Техник Тест Тест", Photo = "/images/defaultPhoto.png" };
+                IdentityResult result = await userManager.CreateAsync(technic, technicPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(technic, "Техник");
                 }
             }
         }

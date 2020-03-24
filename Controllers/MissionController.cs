@@ -35,28 +35,8 @@ namespace OXG.CRM_System.Controllers
         {
             var mission = await db.Missions.Include(e => e.Employeer).Include(e => e.Event).Where(e => e.Id == id).FirstOrDefaultAsync();
             var type = mission.MissionType;
-            switch (type)
-            {//TODO: Добавить больше типов мероприятий
-                case "Клиент":
-                    ViewBag.Message = $"{mission.MissionText}";
-                    return RedirectToAction("Client", "Sight", new { id = mission.Event.ClientId });
-                    
-                case "Артист":
-                    ViewBag.Message = $"{mission.MissionText}";
-                    return RedirectToAction("Artist", "Sight", new { id = mission.Event.ArtistId });
-                   
-                case "Техник":
-                    ViewBag.Message = $"{mission.MissionText}";
-                    return RedirectToAction("Technic", "Sight", new { id = mission.Event.TechnicId });
-                    
-                case "Договор":
-                    ViewBag.Message = $"{mission.MissionText}";
-                    return RedirectToAction("Contract", "Sight", new { id = mission.Event.ContractId });
-                    
-                default:
-                    ViewBag.Message = $"!!!ЭТО ОТЛАДОЧНАЯ ИНФОРМАЦИЯ!!!{mission.MissionText}";
-                    return StatusCode(404);
-            }
+
+            return RedirectToAction("View", "Events", new { id = mission.EventId, missionId =mission.Id });
         }
     }
 }

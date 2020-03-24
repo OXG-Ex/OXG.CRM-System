@@ -12,6 +12,8 @@ namespace OXG.CRM_System.Models
 
         public string Name { get; set; }
 
+        public string Path { get; set; }
+
         public DateTime CreatedDate { get; set; }
 
         public int? EventId { get; set; }

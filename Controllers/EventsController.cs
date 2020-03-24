@@ -34,7 +34,7 @@ namespace OXG.CRM_System.Controllers
             return View();
         }
 
-        public async Task<IActionResult> View(int id)
+        public async Task<IActionResult> View(int id, int? missionId)
         {
             var eventDb = await db.Events.Include(e => e.Client)
                                          .Include(e => e.Manager)
@@ -43,6 +43,11 @@ namespace OXG.CRM_System.Controllers
                                          .Include(e => e.Missions)
                                          .Where(e => e.Id == id)
                                          .FirstOrDefaultAsync();
+            if (missionId != null)
+            {
+                var mission = await db.Missions.Where(e => e.Id == missionId).FirstOrDefaultAsync();
+                ViewBag.Message = $"{mission.MissionText}";
+            }
             
             return View(eventDb);
         }
@@ -65,9 +70,9 @@ namespace OXG.CRM_System.Controllers
                 eventDb.Client = clientDb;
                 await db.AddAsync(eventDb);
                 await db.SaveChangesAsync();
-                var artistMission = new Mission() {Employeer = manager,Event = eventDb,CreatedDate =DateTime.Now, DeadLine = DateTime.Now.AddHours(2), MissionType="Артист", MissionText=$"Указать артиста для мероприятия '{eventDb.Name}'" };
-                var technicMission = new Mission() { Employeer = manager, Event = eventDb, CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(2), MissionType = "Техник", MissionText = $"Указать техника для мероприятия '{eventDb.Name}'" };
-                var contractMission = new Mission() { Employeer = manager, Event = eventDb, CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(48), MissionType = "Договор", MissionText = $"Создать договор для клиента '{clientDb.Name}' по мероприятию '{eventDb.Name}'" };
+                var artistMission = new Mission() {Employeer = manager,Event = eventDb,CreatedDate =DateTime.Now, DeadLine = DateTime.Now.AddHours(2), MissionType= "Указать артиста", MissionText=$"Указать артиста для мероприятия '{eventDb.Name}'" };
+                var technicMission = new Mission() { Employeer = manager, Event = eventDb, CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(2), MissionType = "Указать техника", MissionText = $"Указать техника для мероприятия '{eventDb.Name}'" };
+                var contractMission = new Mission() { Employeer = manager, Event = eventDb, CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(48), MissionType = "Создать договор", MissionText = $"Создать договор для клиента '{clientDb.Name}' по мероприятию '{eventDb.Name}'" };
                 await db.AddAsync(artistMission);
                 await db.AddAsync(technicMission);
                 await db.AddAsync(contractMission);
