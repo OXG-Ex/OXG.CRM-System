@@ -62,7 +62,7 @@
                     <div class="form-group row">
                         <div class="alert alert-dismissible alert-info col-md-4">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <strong>Текущих задач: </strong>@Model.Missions.Count
+                            <strong>Текущих задач: </strong>@Model.Missions.Where(e => e.Status!="Закрыто").Count()
                         </div>
                         <div class="alert alert-dismissible alert-info col-md-4">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>

@@ -41,6 +41,7 @@ namespace OXG.CRM_System.Controllers
                                          .Include(e => e.Technic)
                                          .Include(e => e.Contract)
                                          .Include(e => e.Missions)
+                                         .Include(e => e.Works)
                                          .Where(e => e.Id == id)
                                          .FirstOrDefaultAsync();
             if (missionId != null)

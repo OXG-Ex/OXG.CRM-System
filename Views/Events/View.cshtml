@@ -38,11 +38,51 @@
         <th scope="row">Дата поступления:</th>
         <td>@Model.CreatedDate.ToShortDateString()</td>
     </tr>
+
+    @if (Model.Works != null)
+    {
+        <tr>
+            <th scope="row">Услуги:</th>
+            <td>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Наименование</th>
+                            <th scope="col">Кол-во</th>
+                            <th scope="col">Сумма</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Works)
+                        {
+                        <tr class="table-primary">
+                            <th scope="row">@item.Name</th>
+                            <td>@item.Num</td>
+                            <td>@item.Sum</td>
+                            <td><a asp-controller="Works" asp-action="DeleteFromEvent" asp-route-id="@item.Id" asp-route-eid="@Model.Id">Удалить</a></td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <a asp-controller="Works" asp-action="AddToEvent" asp-route-id="@Model.Id">Добавить</a>
+            </td>
+
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <th scope="row">Услуги:</th>
+            <td><a asp-controller="Works" asp-action="Add" asp-route-id="@Model.Id">Добавить</a></td>
+        </tr>
+    }
+
     @if (Model.Contract != null)
     {
         <tr>
             <th scope="row">Договор:</th>
-            <td><a asp-controller="Sight" asp-action="Contract" asp-route-id="@Model.Contract.Id">Договор об оказании услуг от @Model.Contract.CreatedDate.ToShortDateString()</a></td>
+            <td><a asp-controller="Sight" asp-action="Contract" asp-route-id="@Model.Contract.Id">Договор об оказании услуг от @Model.Contract.CreatedDate.ToShortDateString()</a> |  <a asp-controller="Contract" asp-action="Create" asp-route-id="@Model.Id">Пересоздать</a></td>
         </tr>
     }
     else

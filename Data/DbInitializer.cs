@@ -21,7 +21,7 @@ namespace OXG.CRM_System.Data
             string technicEmail = "technic212@gmail.com";
             string technicPassword = "Technic_123";
 
-            if (db.Works == null)
+            if (db.Works.Count() < 1)
             {
                 await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Жасмин'", Price = 5500 });
                 await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Человек-дракон'", Price = 7500 });

@@ -30,13 +30,15 @@ namespace OXG.CRM_System.Controllers
 
         public async Task<IActionResult> Create(int id)
         {
-            var pathDocument = appEnvironment.ContentRootPath + "\\wwwroot\\files\\template.docx";
-            var docFile = new FileInfo(pathDocument);
+            var pathTemplate = appEnvironment.ContentRootPath + "\\wwwroot\\files\\template.docx";
             var eventDb = await db.Events.Include(e => e.Client).Include(e => e.Manager).Include(e => e.Missions).Include(e => e.Works).Include(e => e.Contract).Where(e => e.Id == id).FirstOrDefaultAsync();
             var workTable = new TableContent("Works");
             var i = 0;
             var filename = $"{eventDb.Id}" + ".docx";
-            
+            var pathDocument = appEnvironment.ContentRootPath + $"\\wwwroot\\files\\contracts\\{filename}";
+            var docFile = new FileInfo(pathTemplate);
+
+            docFile.CopyTo(appEnvironment.ContentRootPath + $"\\wwwroot\\files\\contracts\\{filename}", true);
 
             foreach (var item in eventDb.Works)
             {
@@ -50,6 +52,7 @@ namespace OXG.CRM_System.Controllers
 
             var valuesToFill = new Content(new FieldContent("docDate", DateTime.Now.ToShortDateString()),
                                            new FieldContent("docNum",$"{eventDb.Id}" ),
+                                           new FieldContent("EventTotalPrice", $"{eventDb.TotalPrice}"),
                                            new FieldContent("docClient", $"{eventDb.Client.Name}"),
                                            workTable);
 
@@ -60,7 +63,7 @@ namespace OXG.CRM_System.Controllers
                 outputDocument.SaveChanges();
             }
 
-            docFile.CopyTo(appEnvironment.ContentRootPath + $"\\wwwroot\\files\\contracts\\{filename}",true);
+            
 
             var contract = new Contract() { Event = eventDb, Manager = eventDb.Manager, Name = filename, CreatedDate = DateTime.Now, Client = eventDb.Client, Path = appEnvironment.ContentRootPath + $"\\wwwroot\\files\\contracts\\{filename}" };
             await db.AddAsync(contract);

@@ -1,0 +1,18 @@
+﻿@model OXG.CRM_System.Models.Event
+@{
+    ViewData["Title"] = "Add";
+}
+
+<h1>Добавить услугу</h1>
+<form asp-action="AddToEvent">
+    <div class="form-group">
+        <select asp-items="ViewBag.WorkList" name="WorkId" class="custom-select">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Кол-во</label>
+        <input name="WorkNum" class="form-control" placeholder="0">
+    </div>
+    <input hidden name="EventID" value="@Model.Id" />
+    <input class="btn btn-dark" type="submit" asp-action="AddToEvent" value="Добавить"/>
+</form>
