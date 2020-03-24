@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting.Internal;
+using OXG.CRM_System.Data;
 using OXG.CRM_System.Models;
 using TemplateEngine.Docx;
 
@@ -25,6 +26,24 @@ namespace OXG.CRM_System.Controllers
 
         public IActionResult Index()
         {
+            return View();
+        }
+
+        public async Task<IActionResult> SendToEmail(int id)
+        {
+            var eventDb = await db.Events.Include(e => e.Contract).Include(e => e.Missions).Include(e => e.Client).Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (eventDb.Contract == null)
+            {
+                return Content("Ошибка: не найден контракт мероприятия");
+            }
+            await EmailService.SendEmailAsync(eventDb.Client.Email,"Договор","Высылаю вам договор об оказании услуг на вашем мероприятии", eventDb.Contract.Path);
+            ViewBag.SendToAdress = "Oxygeniuss@yandex.ru";
+            ViewBag.ClientName = eventDb.Client.Name;
+            ViewBag.ContractName = eventDb.Contract.Name;
+
+            var mission = eventDb.Missions.Where(m => m.MissionType == "Отправить договор клиенту").FirstOrDefault();
+            mission.Status = "Закрыто";
+            await db.SaveChangesAsync();
             return View();
         }
 

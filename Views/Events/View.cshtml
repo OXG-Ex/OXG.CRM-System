@@ -55,12 +55,12 @@
                     <tbody>
                         @foreach (var item in Model.Works)
                         {
-                        <tr class="table-primary">
-                            <th scope="row">@item.Name</th>
-                            <td>@item.Num</td>
-                            <td>@item.Sum</td>
-                            <td><a asp-controller="Works" asp-action="DeleteFromEvent" asp-route-id="@item.Id" asp-route-eid="@Model.Id">Удалить</a></td>
-                        </tr>
+                            <tr class="table-primary">
+                                <th scope="row">@item.Name</th>
+                                <td>@item.Num</td>
+                                <td>@item.Sum</td>
+                                <td><a asp-controller="Works" asp-action="DeleteFromEvent" asp-route-id="@item.Id" asp-route-eid="@Model.Id">Удалить</a></td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -82,7 +82,7 @@
     {
         <tr>
             <th scope="row">Договор:</th>
-            <td><a asp-controller="Sight" asp-action="Contract" asp-route-id="@Model.Contract.Id">Договор об оказании услуг от @Model.Contract.CreatedDate.ToShortDateString()</a> |  <a asp-controller="Contract" asp-action="Create" asp-route-id="@Model.Id">Пересоздать</a></td>
+            <td><a asp-controller="Sight" asp-action="Contract" asp-route-id="@Model.Contract.Id">Договор об оказании услуг от @Model.Contract.CreatedDate.ToShortDateString()</a> |  <a asp-controller="Contract" asp-action="Create" asp-route-id="@Model.Id">Пересоздать</a> | <a asp-controller="Contract" asp-action="SendToEmail" asp-route-id="@Model.Id">Отправить клиенту</a></td>
         </tr>
     }
     else
