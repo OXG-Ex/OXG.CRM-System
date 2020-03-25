@@ -41,7 +41,7 @@ namespace OXG.CRM_System.Controllers
             ViewBag.ClientName = eventDb.Client.Name;
             ViewBag.ContractName = eventDb.Contract.Name;
 
-            var mission = eventDb.Missions.Where(m => m.MissionType == "Отправить договор клиенту").FirstOrDefault();
+            var mission = eventDb.Missions.Where(m => m.MissionText.Contains("Отправить договор клиенту")).FirstOrDefault();
             mission.Status = "Закрыто";
             await db.SaveChangesAsync();
             return View();
@@ -88,7 +88,7 @@ namespace OXG.CRM_System.Controllers
             await db.AddAsync(contract);
             await db.SaveChangesAsync();
 
-            var mission = eventDb.Missions.Where(m => m.MissionType == "Создать договор").FirstOrDefault();
+            var mission = eventDb.Missions.Where(m => m.MissionText.Contains("Создать договор")).FirstOrDefault();
             mission.Status = "Закрыто";
             await db.SaveChangesAsync();
             return View();

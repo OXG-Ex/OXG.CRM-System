@@ -46,7 +46,7 @@ namespace OXG.CRM_System.Controllers
 
                 foreach (var item in eventDb.Missions)
                 {
-                    if (item.MissionType == "Указать техника")
+                    if (item.MissionText.Contains("Указать техника"))
                     {
                         item.Status = "Закрыто";
                     }
