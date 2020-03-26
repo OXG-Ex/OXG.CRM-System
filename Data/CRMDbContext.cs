@@ -23,6 +23,8 @@ namespace OXG.CRM_System.Models
 
         public DbSet<Certificate> Certificates { get; set; }
 
+        public DbSet<Contract> Contracts { get; set; }
+
         public DbSet<Client> Clients { get; set; }
 
         public DbSet<Costume> Costumes { get; set; }

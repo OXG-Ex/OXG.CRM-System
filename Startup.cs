@@ -11,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OXG.CRM_System.Models;
+using VkNet;
+using VkNet.Abstractions;
+using VkNet.Model;
 
 namespace OXG.CRM_System
 {
@@ -29,10 +32,16 @@ namespace OXG.CRM_System
             services.AddDbContext<CRMDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<Models.User, IdentityRole>()
                 .AddEntityFrameworkStores<CRMDbContext>();
 
-            services.AddControllersWithViews();
+            services.AddSingleton<IVkApi>(sp => {
+                var api = new VkApi();
+                api.Authorize(new ApiAuthParams { AccessToken = Configuration["Config:AccessToken"] });
+                return api;
+            });
+
+            services.AddControllersWithViews().AddNewtonsoftJson();
         }
 
         

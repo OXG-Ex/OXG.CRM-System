@@ -120,14 +120,14 @@
     @if (Model.Artist != null)
     {
         <tr>
-            <th scope="row">Главный артист:</th>
+            <th scope="row">Ответственный артист:</th>
             <td><a asp-controller="Sight" asp-action="Artist" asp-route-id="@Model.Artist.Id">@Model.Artist.Name</a></td>
         </tr>
     }
     else
     {
         <tr>
-            <th scope="row">Главный артист:</th>
+            <th scope="row">Ответственный артист:</th>
             <td><a asp-controller="Artist" asp-action="AddToEvent" asp-route-id="@Model.Id">Указать</a></td>
         </tr>
     }

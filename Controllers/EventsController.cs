@@ -30,7 +30,7 @@ namespace OXG.CRM_System.Controllers
 
         public IActionResult New()
         {
-            ViewBag.EventTypes = new SelectList(TypesAndStaticValues.EventTypes);
+            ViewBag.EventTypes = TypesAndStaticValues.GetEventTypes();
             return View();
         }
 

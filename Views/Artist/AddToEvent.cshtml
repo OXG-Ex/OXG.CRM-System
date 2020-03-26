@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewData["Title"] = "AddToEvent";
+}
+
+<h1>Указать артиста ответственного за мероприятие</h1>
+
+<form asp-action="AddToEvent">
+    <select asp-items="@ViewBag.Artists" name="ArtistId" class="custom-control custom-select"></select>
+    <input name="eventId" type="number" hidden="" value="@ViewBag.EventId" />
+    <input asp-action="AddToEvent" type="submit" class="btn btn-success" value="Подтвердить" />
+</form>

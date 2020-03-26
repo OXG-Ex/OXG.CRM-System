@@ -21,6 +21,9 @@ namespace OXG.CRM_System.Data
             string technicEmail = "technic212@gmail.com";
             string technicPassword = "Technic_123";
 
+            string artistEmail = "artist212@gmail.com";
+            string artistPassword = "Artist_123";
+
             if (db.Works.Count() < 1)
             {
                 await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Жасмин'", Price = 5500 });
@@ -34,6 +37,7 @@ namespace OXG.CRM_System.Data
                 await db.Works.AddAsync(new Work() { Name = "Фрик шоу", Price = 5000 });
                 await db.Works.AddAsync(new Work() { Name = "Молекулярное шоу", Price = 6500 });
                 await db.Works.AddAsync(new Work() { Name = "Танцовщицы", Price = 3500 });
+                await db.Works.AddAsync(new Work() { Name = "Благотворительность", Price = 0 });
                 await db.SaveChangesAsync();
             }
 
@@ -90,6 +94,16 @@ namespace OXG.CRM_System.Data
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(technic, "Техник");
+                }
+            }
+
+            if (await userManager.FindByNameAsync(artistEmail) == null)
+            {
+                Artist artist = new Artist { Email = artistEmail, UserName = artistEmail, Name = "Артист Тест Тест", Photo = "/images/defaultPhoto.png" };
+                IdentityResult result = await userManager.CreateAsync(artist, artistPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(artist, "Артист");
                 }
             }
         }

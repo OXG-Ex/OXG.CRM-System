@@ -8,7 +8,7 @@ namespace OXG.CRM_System.Data
 {
     public static class TypesAndStaticValues
     {
-        public static List<string> EventTypes = new List<string>
+        private static List<string> EventTypes = new List<string>
         {
             "День рождения (Взрослый)",
             "День рождения (Детский)",
@@ -20,12 +20,13 @@ namespace OXG.CRM_System.Data
             "Корпоратив"
         };
 
-        public static List<string> MissionTypes = new List<string>
+        private static List<string> MissionTypes = new List<string>
         {
             "Клиент",
             "Артист",
             "Техник",
-            "Договор"
+            "Договор",
+            "Email",
         };
 
         public static SelectList GetEventTypes()
