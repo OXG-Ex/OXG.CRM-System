@@ -15,5 +15,9 @@ namespace OXG.CRM_System.Models.Employeers
         public List<Contract> Contracts { get; set; }
 
         public List<Event> Events { get; set; }
+
+        public string VkAdress { get; set; }//Ссылка на ВК
+        
+        public string TgAdress { get; set; }//Ссылка на телеграмм
     }
 }

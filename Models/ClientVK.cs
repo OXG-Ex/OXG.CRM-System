@@ -9,8 +9,7 @@ namespace OXG.CRM_System.Models
 {
     public class ClientVK
     {
-        [ForeignKey("Client")]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public long VkId { get; set; }
 

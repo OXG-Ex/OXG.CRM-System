@@ -41,10 +41,10 @@ namespace OXG.CRM_System.Data
                 await db.SaveChangesAsync();
             }
 
-            //if (db.Clients.Count() <1)
-            //{
-            //    await db.Clients.AddAsync(new Client() {Name = "BufferClient", Id = 142536});
-            //}
+            if (db.Clients.Count() < 1)
+            {
+                await db.Clients.AddAsync(new Client() { Name = "Temp"});
+            }
 
             if (await roleManager.FindByNameAsync("Администратор") == null)
             {
@@ -84,7 +84,7 @@ namespace OXG.CRM_System.Data
 
             if (await userManager.FindByNameAsync(managerEmail) == null)
             {
-                Manager manager = new Manager { Email = managerEmail, UserName = managerEmail, Name ="Менеджер Тест Тест", Photo = "/images/defaultPhoto.png" };
+                Manager manager = new Manager { Email = managerEmail, UserName = managerEmail, Name ="Менеджер Тест Тест", Photo = "/images/defaultPhoto.png", TgAdress ="не указано", VkAdress="не указано"};
                 IdentityResult result = await userManager.CreateAsync(manager, managerPassword);
                 if (result.Succeeded)
                 {
