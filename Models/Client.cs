@@ -19,6 +19,11 @@ namespace OXG.CRM_System.Models
 
         public string Description { get; set; }
 
+        public List<Event> Events { get; set; }
+
+        public int ClientVKId { get; set; }
+        public ClientVK ClientVK { get; set; }
+
         public string? ManagerId { get; set; }
         public Manager Manager { get; set; }
 

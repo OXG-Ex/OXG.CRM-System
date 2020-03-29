@@ -26,7 +26,7 @@ namespace OXG.CRM_System.Data
 
             if (db.Works.Count() < 1)
             {
-                await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Жасмин'", Price = 5500 });
+                await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Жасмин'", Price = 5500, Description = "Лучшее шоу за эти деньги" });
                 await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Человек-дракон'", Price = 7500 });
                 await db.Works.AddAsync(new Work() { Name = "Пиротехническое шоу 'SuperNova'", Price = 8500 });
                 await db.Works.AddAsync(new Work() { Name = "Шоу Тесла", Price = 10000 });
@@ -40,6 +40,11 @@ namespace OXG.CRM_System.Data
                 await db.Works.AddAsync(new Work() { Name = "Благотворительность", Price = 0 });
                 await db.SaveChangesAsync();
             }
+
+            //if (db.Clients.Count() <1)
+            //{
+            //    await db.Clients.AddAsync(new Client() {Name = "BufferClient", Id = 142536});
+            //}
 
             if (await roleManager.FindByNameAsync("Администратор") == null)
             {

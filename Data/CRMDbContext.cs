@@ -27,6 +27,8 @@ namespace OXG.CRM_System.Models
 
         public DbSet<Client> Clients { get; set; }
 
+        public DbSet<ClientVK> ClientsVK { get; set; }
+
         public DbSet<Costume> Costumes { get; set; }
 
         public DbSet<Equipment> Equipment { get; set; }
