@@ -69,6 +69,8 @@ namespace OXG.CRM_System.Controllers
             temp.Name = manager.Name;
             temp.PhoneNumber = manager.PhoneNumber;
             temp.Email = manager.Email;
+            temp.VkAdress = manager.VkAdress;
+            temp.TgAdress = manager.TgAdress;
             await db.SaveChangesAsync();
             return RedirectToAction("Personal","Manager");
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Models;
 using OXG.CRM_System.Models.Employeers;
 using System;
@@ -67,6 +68,11 @@ namespace OXG.CRM_System.Data
                 await roleManager.CreateAsync(new IdentityRole("Артист"));
             }
 
+            if (await db.Events.Where(e => e.Name == "TempEvent").FirstOrDefaultAsync() == null)
+            {
+                await db.Events.AddAsync(new Event() {Name = "TempEvent" });
+                await db.SaveChangesAsync();
+            }
 
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
