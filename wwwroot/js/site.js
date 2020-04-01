@@ -1,4 +1,14 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
+    divs = document.querySelectorAll('div[title="Дедлайн провален"]');
 
-// Write your JavaScript code.
+    divs2 = document.querySelectorAll('div[title="Дедлайн близок к провалу"]');
+
+divs.forEach(function (item, i, divs) {
+    item.classList.remove('border-info');
+    item.classList.add('border-danger');
+});
+
+divs2.forEach(function (item, i, divs2) {
+    item.classList.remove('border-info');
+    item.classList.add('border-warning');
+});

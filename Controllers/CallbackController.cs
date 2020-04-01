@@ -92,6 +92,10 @@ namespace OXG.CRM_System.Controllers
                                                     .AddButton("Заказать звонок", "getCall", KeyboardButtonColor.Default)
                                                     .AddLine()
                                                     .Build();
+                        var kbdReturn = new KeyboardBuilder()
+                                                    .AddButton("/RETURN/", "return", KeyboardButtonColor.Default)
+                                                    .SetInline(false)
+                                                    .Build();
                         //получение пользователя от ВК по id
                         var user = _vkApi.Users.Get(new long[] { (long)msg.FromId }, VkNet.Enums.Filters.ProfileFields.Contacts).FirstOrDefault();
                         //Поиск клиента в БД
@@ -145,7 +149,7 @@ namespace OXG.CRM_System.Controllers
                                             {
                                                 userVk.Stage = "Give me your phone";
                                                 responseText = "Пожалуйста введите номер телефона который вы указывали при оформлении мероприятия";
-                                                keyboard = new KeyboardBuilder().Clear().Build();
+                                                keyboard = kbdReturn;
                                                 break;
                                             }
                                             if (msg.Text == "Нет")
@@ -165,7 +169,7 @@ namespace OXG.CRM_System.Controllers
                                             if (tempClient == null)
                                             {
                                                 responseText = "Ошибка: такого номера нет в базе данных, убедитесь в правильности введённого номера и попробуйте ещё раз";
-                                                keyboard = new KeyboardBuilder().Clear().Build();
+                                                keyboard = kbdReturn;
                                             }
                                             else
                                             {
@@ -310,7 +314,7 @@ namespace OXG.CRM_System.Controllers
                                         case "1":
                                             if (Regex.IsMatch(msg.Text, @"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$", RegexOptions.IgnoreCase))
                                             {
-                                                var mission = new Mission() { CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(3), MissionType ="Звонок", MissionText = $"Позвонить клиенту для разрешения вопроса. Номер телефона: {msg.Text}", Status =$"{userVk.VkId}", Event = new Event() {Name = "TempEvent"} };
+                                                var mission = new Mission() { CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(3), MissionType ="Заявка", MissionText = $"Заявка на звонок. Номер телефона: {msg.Text}", Status =$"{userVk.VkId}", Event = await db.Events.Where(e => e.Name=="TempEvent").FirstOrDefaultAsync() };
                                                 userVk.Stage = "2";
                                                 responseText = "Отлично! Теперь опишите суть своего вопроса";
                                                 await db.Missions.AddAsync(mission);
@@ -335,11 +339,11 @@ namespace OXG.CRM_System.Controllers
                                                 }
                                             }
                                             var manager = await db.Managers.Where(m => m.Id == ident).FirstOrDefaultAsync();
-                                            missiondb.MissionText += $", сообщение клиента: {msg.Text}";
+                                            missiondb.MissionText += $", сообщение клиента: {msg.Text}. Заявка оставлена через Бота ВК. Клиент: <a href=https://{userVk.VkAdress}>{userVk.VkName}</a>";
                                             missiondb.Status = "Создано";
                                             manager.Missions.Add(missiondb);
                                             await db.SaveChangesAsync();
-                                            responseText = "Менеджер свяжется с вами в ближайшее время";
+                                            responseText = "Отлично, в ближайшее время с вами свяжется менеджер. Всего доброго))";
                                             userVk.Branch = "Main";
                                             userVk.Stage = "1";
                                             keyboard = kbdNoClient;
@@ -352,7 +356,7 @@ namespace OXG.CRM_System.Controllers
                                     switch (userVk.Stage)
                                     {
                                         case "1":
-                                            var mission = new Mission() { CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(24), Event = await db.Events.Where(e => e.Name == "TempEvent").FirstOrDefaultAsync(), MissionType = "Звонок", Status = $"{userVk.VkId}", MissionText =$"СОгласовать новое мероприятие. Дата и время: {msg.Text}" };
+                                            var mission = new Mission() { CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(24), Event = await db.Events.Where(e => e.Name == "TempEvent").FirstOrDefaultAsync(), MissionType = "Заявка", Status = $"{userVk.VkId}", MissionText =$"Заявка на проведение мероприятия. Дата и время: {msg.Text}" };
                                             await db.Missions.AddAsync(mission);
                                             await db.SaveChangesAsync();
                                             userVk.Stage = "2";
@@ -370,7 +374,7 @@ namespace OXG.CRM_System.Controllers
                                             }
                                             var manager = await db.Managers.Where(m => m.Id == ident).FirstOrDefaultAsync();
                                             var missionDb = await db.Missions.Where(m => m.Status == $"{userVk.VkId}" && m.EmployeerId == null).FirstOrDefaultAsync();
-                                            missionDb.MissionText += $", Описание(со слов клиента): {msg.Text}. Заявка оставлена через Бота ВК. Клиент: {userVk.VkAdress}";
+                                            missionDb.MissionText += $", Описание(со слов клиента): {msg.Text}. Заявка оставлена через Бота ВК. Клиент: <a href={userVk.VkAdress}>{userVk.VkName}</a>";
                                             missionDb.Status = "Создано";
                                             responseText = "Отлично, в ближайшее время с вами свяжется менеджер. Всего доброго))";
                                             missionDb.Employeer = manager;

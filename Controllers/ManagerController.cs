@@ -28,6 +28,24 @@ namespace OXG.CRM_System.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await db.Managers.Include(e => e.Missions).Include(e => e.Clients).Include(e => e.Contracts).Include(e => e.Events).Where(e => e.Email == User.Identity.Name).FirstOrDefaultAsync();
+            var failedNum = 0;
+            var warNum = 0;
+            foreach (var item in user.Missions)
+            {
+                if (item.LeftTime.TotalSeconds < 0 && item.Status != "Закрыто")
+                {
+                    failedNum++;
+                    ViewBag.BadMessage = $"У вас {failedNum} проваленных дедлайнов, срочно разберитесь с этим";
+                    item.Status = "Дедлайн провален";
+                    continue;
+                }
+                if (item.LeftTime.TotalHours < 1  && item.Status != "Закрыто")
+                {
+                    item.Status = "Дедлайн близок к провалу";
+                    warNum++;
+                    ViewBag.WarningMessage = $"У вас {warNum} заданий близких к провалу дедлайна, разберитесь с этим";
+                }
+            }
             return View(user);
         }
 

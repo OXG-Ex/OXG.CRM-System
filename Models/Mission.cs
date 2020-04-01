@@ -11,9 +11,39 @@ namespace OXG.CRM_System.Models
 
         public string MissionText { get; set; }
 
+        public string Picture
+        {
+            get
+            {
+                switch (MissionType)
+                {
+                    case "Звонок":
+                        return "/images/icons/Phone.png";
+                    case "Email":
+                        return "/images/icons/Email.png";
+                    case "Договор":
+                        return "/images/icons/Note.png";
+                    case "Утверждение макета":
+                        return "/images/icons/Copy.png";
+                    case "Создание задачи":
+                        return "/images/icons/Copy.png";
+                    case "Указать артиста":
+                        return "/images/icons/Playboy.png";
+                    case "Указать техника":
+                        return "/images/icons/Custom.png";
+                    case "Заявка":
+                        return "/images/icons/VK.png";
+                    default:
+                        return "/images/icons/Check Box.png";
+                }
+            }
+        }
+
         public DateTime DeadLine { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        public TimeSpan LeftTime { get { return DeadLine - DateTime.Now; } } 
 
         public string Status { get; set; }
 

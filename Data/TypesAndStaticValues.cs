@@ -27,7 +27,7 @@ namespace OXG.CRM_System.Data
             "Техник",
             "Договор",
             "Email",
-            "Звонок (fromVk)",
+            "Заявка",
             "Звонок"
         };
 

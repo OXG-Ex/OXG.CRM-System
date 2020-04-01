@@ -31,13 +31,29 @@ namespace OXG.CRM_System.Controllers
             return View();
         }
 
+        public IActionResult Reject(int id)
+        {
+            ViewBag.mId = id;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reject(string RejPrin, int id)
+        {
+            var mission = await db.Missions.Where(m => m.Id == id).FirstOrDefaultAsync();
+            mission.Status = "Закрыто";
+            mission.MissionText += $"| Заявка отклонена, причина: {RejPrin}";
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index","Manager");
+        }
+
         public async Task<IActionResult> Close(int id)
         {
             var mission = await db.Missions.Include(e => e.Employeer).Include(e => e.Event).Where(e => e.Id == id).FirstOrDefaultAsync();
             var type = mission.MissionType;
-            if (true)
+            if (type == "Заявка")
             {
-
+                return View("CloseRequest", mission);
             }
             return RedirectToAction("View", "Events", new { id = mission.EventId, missionId =mission.Id });
         }

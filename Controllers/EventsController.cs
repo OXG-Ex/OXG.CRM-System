@@ -71,8 +71,8 @@ namespace OXG.CRM_System.Controllers
                 eventDb.Client = clientDb;
                 await db.AddAsync(eventDb);
                 await db.SaveChangesAsync();
-                var artistMission = new Mission() {Employeer = manager,Event = eventDb,CreatedDate =DateTime.Now, DeadLine = DateTime.Now.AddHours(2), MissionType= "Указать сотрудника", MissionText=$"Указать артиста для мероприятия '{eventDb.Name}'" };
-                var technicMission = new Mission() { Employeer = manager, Event = eventDb, CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(2), MissionType = "Указать сотрудника", MissionText = $"Указать техника для мероприятия '{eventDb.Name}'" };
+                var artistMission = new Mission() {Employeer = manager,Event = eventDb,CreatedDate =DateTime.Now, DeadLine = DateTime.Now.AddHours(3), MissionType= "Указать артиста", MissionText=$"Указать артиста для мероприятия '{eventDb.Name}'" };
+                var technicMission = new Mission() { Employeer = manager, Event = eventDb, CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(3), MissionType = "Указать техника", MissionText = $"Указать техника для мероприятия '{eventDb.Name}'" };
                 var contractMission = new Mission() { Employeer = manager, Event = eventDb, CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(48), MissionType = "Договор", MissionText = $"Создать договор для клиента '{clientDb.Name}' по мероприятию '{eventDb.Name}'" };
                 await db.AddAsync(artistMission);
                 await db.AddAsync(technicMission);
