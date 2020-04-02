@@ -26,9 +26,19 @@ namespace OXG.CRM_System.Controllers
             return View();
         }
 
-        public IActionResult New()
+        public async Task<IActionResult> NewRequest(string RequestText)
         {
-            return View();
+            var request = new Mission();
+            request.CreatedDate = DateTime.Now;
+            request.DeadLine = DateTime.Now.AddDays(1);
+            request.MissionText = RequestText;
+            request.MissionType = "Заявка";
+            request.Status = "Создано";
+            request.Event = await db.Events.Where(e => e.Name == "TempEvent").FirstOrDefaultAsync();
+            request.Employeer = await db.Managers.Where(m => m.Email == User.Identity.Name).FirstOrDefaultAsync();
+            await db.Missions.AddAsync(request);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index", "Manager");
         }
 
         public IActionResult Reject(int id)
@@ -43,6 +53,14 @@ namespace OXG.CRM_System.Controllers
             var mission = await db.Missions.Where(m => m.Id == id).FirstOrDefaultAsync();
             mission.Status = "Закрыто";
             mission.MissionText += $"| Заявка отклонена, причина: {RejPrin}";
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index","Manager");
+        }
+
+        public async Task<IActionResult> Postpound(int Id, int postHour)
+        {
+            var mission = await db.Missions.Where(m => m.Id == Id).FirstOrDefaultAsync();
+            mission.DeadLine = mission.DeadLine.AddHours(postHour);
             await db.SaveChangesAsync();
             return RedirectToAction("Index","Manager");
         }
