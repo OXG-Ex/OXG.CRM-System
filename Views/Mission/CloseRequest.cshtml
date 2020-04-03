@@ -9,7 +9,7 @@
     <hr class="my-4">
     <div class="row">
         <div class="col-lg-6">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalCenter">
+            <button type="button" class="btn btn-primary btn-lg btn-block n" data-toggle="modal" data-target="#ModalCenter">
                 Отложить
             </button>
         </div>
@@ -24,9 +24,9 @@
 
 
 <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <form asp-action="Postpound" method="post">
-            <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+        <form asp-action="Postpound" method="post" >
+            <div class="modal-content" style="width:550px">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Отложить заявку</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
