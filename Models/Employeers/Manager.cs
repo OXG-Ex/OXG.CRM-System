@@ -19,5 +19,7 @@ namespace OXG.CRM_System.Models.Employeers
         public string VkAdress { get; set; }//Ссылка на ВК
         
         public string TgAdress { get; set; }//Ссылка на телеграмм
+
+        public int MissionFromRequestNum { get; set; }
     }
 }

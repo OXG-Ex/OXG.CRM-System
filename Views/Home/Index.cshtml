@@ -8,6 +8,7 @@
         @if (User.Identity.IsAuthenticated && User.IsInRole("Администратор"))
         {
             <p> <a asp-action="Index" asp-controller="Roles">Управление ролями</a></p>
+            <p> <a asp-action="Index" asp-controller="Admin">Администрирование</a></p>
         }
 
         @if (User.Identity.IsAuthenticated && User.IsInRole("Менеджер"))

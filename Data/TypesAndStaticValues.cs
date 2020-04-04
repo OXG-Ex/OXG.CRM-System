@@ -31,6 +31,19 @@ namespace OXG.CRM_System.Data
             "Звонок"
         };
 
+        public static List<string> RejectCauses = new List<string>
+        {
+            "Спам",
+            "Высокая стоимость услуг",
+            "Нет свободной аппаратуры",
+            "Нет свободного реквизита",
+            "Нет свободных артистов",
+            "Недостаточный ассортимент услуг",
+            "Не соответствие площадки ТБ",
+            "Слишком далеко",
+            "Нет разрешения от спец. служб"
+        };
+
         public static SelectList GetEventTypes()
         {
             return new SelectList(EventTypes);

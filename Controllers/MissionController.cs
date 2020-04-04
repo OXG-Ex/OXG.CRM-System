@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OXG.CRM_System.Data;
 using OXG.CRM_System.Models;
 
 namespace OXG.CRM_System.Controllers
@@ -23,6 +25,13 @@ namespace OXG.CRM_System.Controllers
 
         public IActionResult Index()
         {
+            return View();
+        }
+
+        public IActionResult NewEvent()
+        {
+            ViewBag.EventTypes = TypesAndStaticValues.GetEventTypes();
+            ViewBag.FromRequest = true;
             return View();
         }
 
@@ -44,6 +53,7 @@ namespace OXG.CRM_System.Controllers
         public IActionResult Reject(int id)
         {
             ViewBag.mId = id;
+            ViewBag.RejectCauses = new SelectList(TypesAndStaticValues.RejectCauses);
             return View();
         }
 

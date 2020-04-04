@@ -1,0 +1,128 @@
+﻿@model OXG.CRM_System.ViewModels.AdminIndexVM
+@{
+    ViewData["Title"] = "Index";
+}
+<script src="~/js/Chart.min.js"></script>
+<h1>Admin/Index</h1>
+
+<div class="row">
+    <div class="col-lg-4">
+        <a class="btn btn-outline-info btn-block">Сотрудники</a>
+        <a class="btn btn-outline-info btn-block">Уведомления</a>
+    </div>
+    <div class="col-lg-4">
+        <a class="btn btn-outline-info btn-block">Услуги</a>
+        <a class="btn btn-outline-info btn-block">Заявки</a>
+    </div>
+    <div class="col-lg-4">
+        <a class="btn btn-outline-info btn-block">Мероприятия</a>
+        <a class="btn btn-outline-info btn-block">Задачи</a>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card border-primary">
+            <div class="container-fluid">
+                <canvas id="eventSumChart" @*width="420" height="220"*@></canvas> @*График доходов 2 месяцв, линейный, 30 дней*@
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card border-primary">
+            <div class="container-fluid">
+                <canvas id="requestCloseTypesChart" width="420" height="220"></canvas> @*График причин отклонения заявок, столбы, всё время*@
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card border-primary">
+            <div class="container-fluid">
+                <canvas id="numWorkPopularChart" width="420" height="220"></canvas> @*График популярности различных услуг, столбы, 30 дней или всё время*@
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card border-primary">
+            <div class="container-fluid">
+                <canvas id="eventTypesChart" width="420" height="220"></canvas> @*График типов мероприятий, круговой, всё время*@
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card border-primary">
+            <div class="container-fluid">
+                <canvas id="ManagerGoodRequestChart" width="420" height="220"></canvas> @*График одобренных заявок менеджеров, круговой, 30 дней или всё время*@
+            </div>
+        </div>
+    </div>
+</div>
+
+TODO: Добавить логику создания графиков в это место
+<script>
+                    var labls =@Json.Serialize(Model.Last30Days);
+                    var datas =@Json.Serialize(Model.EventsSum);
+                    var rejectCauses =@Json.Serialize(Model.RejectCauses2);
+                    var rejectNums =@Json.Serialize(Model.RejectNum);
+
+                    var ctx = document.getElementById("eventSumChart");
+                    var ct2 = document.getElementById("requestCloseTypesChart");
+
+
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                    labels:labls,
+                    datasets: [{
+                        label: 'Сумма заказов (₽)',
+                        data: datas,
+                        backgroundColor: [
+                    '       rgba(0, 157, 255, 0.2)'
+                        ],
+                    borderColor: [
+                             'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                        }]
+                        },
+                    options: {
+                        scales: {
+                        yAxes: [{
+                         ticks: {
+                        beginAtZero: true
+                            }
+                        }]
+                        }
+                        }
+                    });
+        var barChart = new Chart(ct2, {
+  type: 'bar',
+            data: {
+                labels: rejectCauses,
+    datasets: [{
+        label: 'Причины отклонения заявок',
+        data: rejectNums,
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.6)',
+        'rgba(54, 162, 235, 0.6)',
+        'rgba(255, 206, 86, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(153, 102, 255, 0.6)',
+        'rgba(255, 159, 64, 0.6)',
+        'rgba(255, 99, 132, 0.6)',
+        'rgba(54, 162, 235, 0.6)',
+        'rgba(255, 206, 86, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(153, 102, 255, 0.6)'
+      ]
+    }]
+  }
+});
+
+</script>

@@ -29,7 +29,7 @@ namespace OXG.CRM_System.Controllers
         }
 
         public IActionResult New()
-        {
+        {//TODO: добавить выбор клиента из БД
             ViewBag.EventTypes = TypesAndStaticValues.GetEventTypes();
             return View();
         }
@@ -66,6 +66,10 @@ namespace OXG.CRM_System.Controllers
                    clientDb = new Client(model);
                 }    
                 var manager = await db.Managers.Where(e => e.Email == User.Identity.Name).FirstOrDefaultAsync();
+                if (model.FromRequest == true)
+                {
+                    manager.MissionFromRequestNum++;
+                }
                 eventDb.Manager = manager;
                 clientDb.Manager = manager;
                 eventDb.Client = clientDb;

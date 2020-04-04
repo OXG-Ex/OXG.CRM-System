@@ -35,6 +35,8 @@ namespace OXG.CRM_System.ViewModels
 
         public string ClientEmail { get; set; }
 
+        public bool FromRequest { get; set; }
+
         [Required(ErrorMessage = "Создайте краткое описание клиента")]
         public string ClientDescription { get; set; }
     }
