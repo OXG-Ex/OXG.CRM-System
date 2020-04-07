@@ -28,9 +28,10 @@ namespace OXG.CRM_System.Controllers
             return View();
         }
 
-        public IActionResult New()
+        public IActionResult New(bool? FromRequest)
         {//TODO: добавить выбор клиента из БД
             ViewBag.EventTypes = TypesAndStaticValues.GetEventTypes();
+            ViewBag.FromRequest = FromRequest;
             return View();
         }
 

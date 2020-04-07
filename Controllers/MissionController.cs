@@ -32,7 +32,7 @@ namespace OXG.CRM_System.Controllers
         {
             ViewBag.EventTypes = TypesAndStaticValues.GetEventTypes();
             ViewBag.FromRequest = true;
-            return View();
+            return RedirectToAction("New","Events",new {FromRequest = true});
         }
 
         public async Task<IActionResult> NewRequest(string RequestText)

@@ -10,7 +10,7 @@
         <label for="Input">Причина отклонения</label>
         @*<input name="RejPrin" type="" class="form-control" id="Input" placeholder="">*@
         <select asp-items="@ViewBag.RejectCauses" name="RejPrin" class="custom-select"></select>
-        <small id="emailHelp" class="form-text text-muted">Введите причину по которой заявка была отклонена</small>
+        <small id="emailHelp" class="form-text text-muted">Выберите причину по которой заявка была отклонена</small>
         <input type="submit" class="btn btn-primary" value="Отправить"/>
         <input hidden name="id" value="@ViewBag.mId" />
     </div>

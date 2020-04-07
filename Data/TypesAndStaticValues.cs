@@ -49,6 +49,11 @@ namespace OXG.CRM_System.Data
             return new SelectList(EventTypes);
         }
 
+        public static List<string> GetEventTypesList()
+        {
+            return new List<string>(EventTypes);
+        }
+
         public static SelectList GetMissionTypes()
         {
             return new SelectList(MissionTypes);

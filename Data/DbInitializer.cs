@@ -27,18 +27,18 @@ namespace OXG.CRM_System.Data
 
             if (db.Works.Count() < 1)
             {
-                await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Жасмин'", Price = 5500, Description = "Лучшее шоу за эти деньги" });
-                await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Человек-дракон'", Price = 7500 });
-                await db.Works.AddAsync(new Work() { Name = "Пиротехническое шоу 'SuperNova'", Price = 8500 });
-                await db.Works.AddAsync(new Work() { Name = "Шоу Тесла", Price = 10000 });
-                await db.Works.AddAsync(new Work() { Name = "Светодиодное шоу", Price = 3500 });
-                await db.Works.AddAsync(new Work() { Name = "Аниматор", Price = 3000 });
-                await db.Works.AddAsync(new Work() { Name = "Ведущий", Price = 5000 });
-                await db.Works.AddAsync(new Work() { Name = "Ходулисты", Price = 3000 });
-                await db.Works.AddAsync(new Work() { Name = "Фрик шоу", Price = 5000 });
-                await db.Works.AddAsync(new Work() { Name = "Молекулярное шоу", Price = 6500 });
-                await db.Works.AddAsync(new Work() { Name = "Танцовщицы", Price = 3500 });
-                await db.Works.AddAsync(new Work() { Name = "Благотворительность", Price = 0 });
+                await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Жасмин'", Price = 5500, Description = "Лучшее шоу за эти деньги", Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Огненное шоу 'Человек-дракон'", Price = 7500, Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Пиротехническое шоу 'SuperNova'", Price = 8500, Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Шоу Тесла", Price = 10000, Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Светодиодное шоу", Price = 3500, Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Аниматор", Price = 3000, Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Ведущий", Price = 5000, Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Ходулисты", Price = 3000, Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Фрик шоу", Price = 5000, Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Молекулярное шоу", Price = 6500, Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Танцовщицы", Price = 3500, Num = 1 });
+                await db.Works.AddAsync(new Work() { Name = "Благотворительность", Price = 0, Num = 1 });
                 await db.SaveChangesAsync();
             }
 
