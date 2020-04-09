@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using EasyDox;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -112,7 +111,7 @@ namespace OXG.CRM_System.Controllers
             var mission = eventDb.Missions.Where(m => m.MissionText.Contains("Создать договор")).FirstOrDefault();
             mission.Status = "Закрыто";
             await db.SaveChangesAsync();
-            return View();
+            return RedirectToAction("Index","Manager");
         }
     }
 }

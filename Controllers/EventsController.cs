@@ -88,6 +88,8 @@ namespace OXG.CRM_System.Controllers
             else
             {
                 ModelState.AddModelError("","Заполните все поля");
+                ViewBag.EventTypes = TypesAndStaticValues.GetEventTypes();
+                ViewBag.FromRequest = model.FromRequest;
                 return View();
             }
             

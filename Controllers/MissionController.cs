@@ -60,6 +60,7 @@ namespace OXG.CRM_System.Controllers
         [HttpPost]
         public async Task<IActionResult> Reject(string RejPrin, int id)
         {
+            
             var mission = await db.Missions.Where(m => m.Id == id).FirstOrDefaultAsync();
             mission.Status = "Закрыто";
             mission.MissionText += $"| Заявка отклонена, причина: {RejPrin}";

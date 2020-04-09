@@ -22,7 +22,7 @@ namespace OXG.CRM_System.ViewModels
 
         [Required]
         [DataType(DataType.Password)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])\S{1,16}$", ErrorMessage = "Пароль должен содержать: 1 заглавную букву, 1 строчную букву и 1 символ")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])\S{1,16}$", ErrorMessage = "Пароль должен содержать : 1 заглавную букву, 1 строчную букву и 1 символ")]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 

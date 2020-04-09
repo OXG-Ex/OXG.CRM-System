@@ -1,0 +1,41 @@
+﻿@model OXG.CRM_System.ViewModels.AdminEmployeersVM
+@{
+    ViewData["Title"] = "Employeers";
+}
+
+<h1>Сотрудники</h1>
+<div class="row">
+    <div class="col-lg-4">
+        @foreach (var item in Model.Managers)
+        {
+            <div class="card border-primary bg-primary text-white mb-3" style="max-width: 20rem;">
+                <div class="card-header"><img src="@item.Photo" width="50px" height="50px" class="img-fluid figure-img rounded" alt="Alternate Text" /> </div>
+                <div class="card-body">
+                    <a asp-action="Manager" asp-route-id="@item.Id" style="color:white"><h4 class="card-title">@item.Name</h4></a>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-lg-4">
+        @foreach (var item in Model.Artists)
+        {
+            <div class="card border-info bg-info text-white mb-3" style="max-width: 20rem;">
+                <div class="card-header"><img src="@item.Photo" width="50px" height="50px" class="img-fluid figure-img rounded" alt="Alternate Text" /></div>
+                <div class="card-body">
+                    <a asp-action="Artist" asp-route-id="@item.Id" style="color:white"><h4 class="card-title">@item.Name</h4></a>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-lg-4">
+        @foreach (var item in Model.Technics)
+        {
+            <div class="card border-secondary bg-secondary text-white mb-3" style="max-width: 20rem;">
+                <div class="card-header"><img src="@item.Photo" width="50px" height="50px" class="img-fluid figure-img rounded" alt="Alternate Text" /></div>
+                <div class="card-body">
+                    <a asp-action="Technic" asp-route-id="@item.Id" style="color:white"><h4 class="card-title">@item.Name</h4></a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

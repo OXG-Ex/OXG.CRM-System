@@ -71,12 +71,20 @@ namespace OXG.CRM_System.Controllers
 
                 return RedirectToAction("Personal","Manager");
             }
-            return View();
+            return Content("Некорректный файл");
         }
 
-        public async Task<IActionResult> Personal()
+        public async Task<IActionResult> Personal(string Id)
         {
-            var user = await db.Managers.Include(e => e.Missions).Include(e => e.Clients).Include(e => e.Contracts).Include(e => e.Events).Where(e => e.Email == User.Identity.Name).FirstOrDefaultAsync();
+            var user = new Manager();
+            if (Id == null)
+            {
+                user = await db.Managers.Include(e => e.Missions).Include(e => e.Clients).Include(e => e.Contracts).Include(e => e.Events).Where(e => e.Email == User.Identity.Name).FirstOrDefaultAsync();
+            }
+            else
+            {
+                user = await db.Managers.Include(e => e.Missions).Include(e => e.Clients).Include(e => e.Contracts).Include(e => e.Events).Where(e => e.Id == Id).FirstOrDefaultAsync();
+            }
             return View(user);
         }
 

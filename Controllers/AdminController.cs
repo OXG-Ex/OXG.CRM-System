@@ -80,5 +80,27 @@ namespace OXG.CRM_System.Controllers
             data.Last30Days.Reverse();
             return View(data);
         }
+
+        public async Task<IActionResult> Employeers()
+        {
+            var data = new AdminEmployeersVM();
+            data.Managers = await db.Managers.ToListAsync();
+            data.Technics = await db.Technics.ToListAsync();
+            data.Artists = await db.Artists.ToListAsync();
+            return View(data);
+        }
+
+        public IActionResult Manager(string id)
+        {
+            return RedirectToAction("Personal","Manager", new { Id=id });
+        }
+
+        public async Task<IActionResult> DeleteEmployeer(string id)
+        {
+            var emp = await db.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+            db.Users.Remove(emp);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
     }
 }
