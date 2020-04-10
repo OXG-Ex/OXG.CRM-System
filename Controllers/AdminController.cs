@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Data;
@@ -63,7 +65,7 @@ namespace OXG.CRM_System.Controllers
                 data.WorksNum.Add(await db.Events.Include(e => e.Works).Where(e => e.Works.Where(w => w.Name == data.WorksName[i]).Count() != 0).CountAsync());
             }
 
-            data.TypesName = TypesAndStaticValues.GetEventTypesList();
+            data.TypesName = StaticValues.GetEventTypesList();
             for (int i = 0; i < data.TypesName.Count(); i++)
             {
                 data.TypesCount.Add(await db.Events.Where(e => e.EventType == data.TypesName[i]).CountAsync());
@@ -102,5 +104,48 @@ namespace OXG.CRM_System.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+        public IActionResult Setting(string id)
+        {
+            var model = new AdminSettingVM();
+            model.CompanyName = StaticValues.CompanyName;
+            model.EmailLogin = StaticValues.EmailLogin;
+            model.EmailPassword = StaticValues.EmailPassword;
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult SaveEmailSetting(AdminSettingVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                StaticValues.CompanyName = model.CompanyName;
+                StaticValues.EmailLogin = model.EmailLogin;
+                StaticValues.EmailPassword = model.EmailPassword;
+                return RedirectToAction("Setting");
+            }
+            return View("Setting");
+        }
+
+        public IActionResult ContractTemplate()
+        {
+            return PhysicalFile(appEnvironment.ContentRootPath + "\\wwwroot\\files\\template.docx", "application / docx", "template.docx");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewTemplate(IFormFile uploadedFile)
+        {
+            if (uploadedFile != null && uploadedFile.ContentType.Contains("officedocument.wordprocessingml.document")) 
+            {
+                var path = "/files/" + "template.docx";
+                using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+                return RedirectToAction("Setting");
+            }
+            ViewBag.BadMessage = "Некорректный файл";
+            return View("Setting");
+        }
     }
-}
+} 

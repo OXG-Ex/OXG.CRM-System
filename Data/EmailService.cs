@@ -13,7 +13,7 @@ namespace OXG.CRM_System.Data
         {
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("ООО 'Рога и копыта'", "semes@gmail.com"));
+            emailMessage.From.Add(new MailboxAddress(StaticValues.CompanyName, StaticValues.EmailLogin));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
             var builder = new BodyBuilder();
@@ -29,7 +29,7 @@ namespace OXG.CRM_System.Data
             using (var client = new SmtpClient())
             {
                 await client.ConnectAsync("smtp.gmail.com", 587, false); //либо использум порт 465 587
-                await client.AuthenticateAsync("semes212@gmail.com", "1425367980"); //логин-пароль от аккаунта
+                await client.AuthenticateAsync(StaticValues.EmailLogin, StaticValues.EmailPassword); //логин-пароль от аккаунта
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);

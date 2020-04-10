@@ -30,7 +30,7 @@ namespace OXG.CRM_System.Controllers
 
         public IActionResult New(bool? FromRequest)
         {//TODO: добавить выбор клиента из БД
-            ViewBag.EventTypes = TypesAndStaticValues.GetEventTypes();
+            ViewBag.EventTypes = StaticValues.GetEventTypes();
             ViewBag.FromRequest = FromRequest;
             return View();
         }
@@ -88,7 +88,7 @@ namespace OXG.CRM_System.Controllers
             else
             {
                 ModelState.AddModelError("","Заполните все поля");
-                ViewBag.EventTypes = TypesAndStaticValues.GetEventTypes();
+                ViewBag.EventTypes = StaticValues.GetEventTypes();
                 ViewBag.FromRequest = model.FromRequest;
                 return View();
             }

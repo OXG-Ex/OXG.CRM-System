@@ -6,17 +6,13 @@
 <h1>Admin/Index</h1>
 <div style="margin:1%">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <a asp-action="Employeers" class="btn btn-outline-info btn-block">Сотрудники</a>
             <a class="btn btn-outline-info btn-block">Уведомления</a>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <a class="btn btn-outline-info btn-block">Услуги</a>
-            <a class="btn btn-outline-info btn-block">Заявки</a>
-        </div>
-        <div class="col-lg-4">
-            <a class="btn btn-outline-info btn-block">Мероприятия</a>
-            <a class="btn btn-outline-info btn-block">Задачи</a>
+            <a asp-action="Setting" class="btn btn-outline-info btn-block">Конфигурация</a>
         </div>
     </div>
     <br />
@@ -271,7 +267,7 @@
         },
         options: {cutoutPercentage: 40}
     });
-</script>
+</script> @*Скрипт графиков*@
 
 <script>
     var container = document.getElementById('LayoutContainer')

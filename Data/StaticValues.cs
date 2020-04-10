@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OXG.CRM_System.Data
 {
-    public static class TypesAndStaticValues
+    public static class StaticValues
     {
         private static List<string> EventTypes = new List<string>
         {
@@ -58,5 +58,10 @@ namespace OXG.CRM_System.Data
         {
             return new SelectList(MissionTypes);
         }
+
+        public static string EmailLogin { get; set; } = "semes212@gmail.com";
+        public static string EmailPassword { get; set; } = "Kipelov21";
+        public static string CompanyName { get; set; } = "ООО Рога и Копыта";
+
     }
 }

@@ -12,7 +12,7 @@ namespace OXG.CRM_System.ViewModels
 
         public List<decimal> EventsSum { get; set; } //Список сумм мероприятий по дням за последние 30 дней
 
-        public List<string> RejectCauses2 { get; set; } = TypesAndStaticValues.RejectCauses;//Причины отклонения заявок
+        public List<string> RejectCauses2 { get; set; } = StaticValues.RejectCauses;//Причины отклонения заявок
 
         public List<int> RejectNum { get; set; } //Список значений отклоненных мероприятий
 

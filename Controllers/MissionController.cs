@@ -30,7 +30,7 @@ namespace OXG.CRM_System.Controllers
 
         public IActionResult NewEvent()
         {
-            ViewBag.EventTypes = TypesAndStaticValues.GetEventTypes();
+            ViewBag.EventTypes = StaticValues.GetEventTypes();
             ViewBag.FromRequest = true;
             return RedirectToAction("New","Events",new {FromRequest = true});
         }
@@ -53,7 +53,7 @@ namespace OXG.CRM_System.Controllers
         public IActionResult Reject(int id)
         {
             ViewBag.mId = id;
-            ViewBag.RejectCauses = new SelectList(TypesAndStaticValues.RejectCauses);
+            ViewBag.RejectCauses = new SelectList(StaticValues.RejectCauses);
             return View();
         }
 
