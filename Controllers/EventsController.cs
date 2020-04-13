@@ -15,7 +15,7 @@ namespace OXG.CRM_System.Controllers
     [Authorize]
     public class EventsController : Controller
     {
-        private CRMDbContext db;
+        private readonly CRMDbContext db;
 
         public EventsController(CRMDbContext context)
         {

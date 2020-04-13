@@ -15,8 +15,8 @@ namespace OXG.CRM_System.Controllers
 {
     public class ContractController : Controller
     {
-        CRMDbContext db;
-        IWebHostEnvironment appEnvironment;
+        private readonly CRMDbContext db;
+        private readonly IWebHostEnvironment appEnvironment;
         public ContractController(CRMDbContext context, IWebHostEnvironment _appEnvironment)
         {
             db = context;

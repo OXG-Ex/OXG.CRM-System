@@ -255,7 +255,6 @@ namespace OXG.CRM_System.Controllers
                                                     var works = db.Works.Where(w => w.Price != 0);
                                                     responseText = "";
                                                     var builder = new KeyboardBuilder();
-                                                    var i = 0;
                                                     foreach (var item in works)
                                                     {
                                                         responseText += $"{item.Name} - стоимость: {item.Price} руб. \n";
@@ -374,7 +373,7 @@ namespace OXG.CRM_System.Controllers
                                             }
                                             var manager = await db.Managers.Where(m => m.Id == ident).FirstOrDefaultAsync();
                                             var missionDb = await db.Missions.Where(m => m.Status == $"{userVk.VkId}" && m.EmployeerId == null).FirstOrDefaultAsync();
-                                            missionDb.MissionText += $", Описание(со слов клиента): {msg.Text}. Заявка оставлена через Бота ВК. Клиент: <a href={userVk.VkAdress}>{userVk.VkName}</a>";
+                                            missionDb.MissionText += $", Описание(со слов клиента): {msg.Text}. Заявка оставлена через Бота ВК. Клиент: <a href=https://{userVk.VkAdress}>{userVk.VkName}</a>";
                                             missionDb.Status = "Создано";
                                             responseText = "Отлично, в ближайшее время с вами свяжется менеджер. Всего доброго))";
                                             missionDb.Employeer = manager;

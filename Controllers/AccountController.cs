@@ -16,10 +16,10 @@ namespace OXG.CRM_System.Controllers
 {
     public class AccountController : Controller
     {
-        CRMDbContext db;
-        UserManager<User> userManager;
-        SignInManager<User> signInManager;
-        IWebHostEnvironment _appEnvironment;
+        private readonly CRMDbContext db;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+        private readonly IWebHostEnvironment _appEnvironment;
         public AccountController(UserManager<User> _userManager, SignInManager<User> _signInManager, CRMDbContext context, IWebHostEnvironment appEnvironment)
         {
             db = context;

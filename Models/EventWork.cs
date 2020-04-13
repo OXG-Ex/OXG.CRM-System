@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OXG.CRM_System.Models
 {
-    public class Work
+    public class EventWork
     {
         public int Id { get; set; }
 
@@ -17,8 +17,18 @@ namespace OXG.CRM_System.Models
 
         public decimal Sum { get => Num * Price; }
 
-        public string Description { get; set; }
+        public EventWork()
+        {
 
-        public int OrdersCount { get; set; }
+        }
+
+        public EventWork(Work work, int num)
+        {
+            Name = work.Name;
+
+            Num = num;
+
+            Price = work.Price;
+        }
     }
 }

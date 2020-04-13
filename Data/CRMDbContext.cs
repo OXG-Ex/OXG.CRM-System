@@ -35,7 +35,11 @@ namespace OXG.CRM_System.Models
 
         public DbSet<Event> Events { get; set; }
 
+        public DbSet<EventWork> EventWorks { get; set; }
+
         public DbSet<Mission> Missions { get; set; }
+
+        public DbSet<Notice> Notices { get; set; }
 
         public DbSet<Work> Works { get; set; }
 

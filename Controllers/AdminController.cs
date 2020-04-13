@@ -14,11 +14,11 @@ using OXG.CRM_System.ViewModels;
 
 namespace OXG.CRM_System.Controllers
 {
-    [Authorize(Roles ="Администратор")]
+    [Authorize(Roles = "Администратор")]
     public class AdminController : Controller
     {
-        CRMDbContext db;
-        IWebHostEnvironment appEnvironment;
+        private readonly CRMDbContext db;
+        private readonly IWebHostEnvironment appEnvironment;
         public AdminController(CRMDbContext context, IWebHostEnvironment _appEnvironment)
         {
             db = context;
@@ -42,10 +42,10 @@ namespace OXG.CRM_System.Controllers
             {
                 data.Last30Days.Add(DateTime.Now.AddDays(-i).ToShortDateString());
                 data.EventsSum.Add(await db.Events.Where(e => e.CreatedDate.DayOfYear == DateTime.Now.AddDays(-i).DayOfYear).SumAsync(e => e.TotalPrice));
-            
+
             }
-            
-            data.RejectNum.Add(await db.Missions.Where(m => m.Status =="Закрыто" && m.MissionType == "Заявка" && m.MissionText.Contains("Спам")).CountAsync());
+
+            data.RejectNum.Add(await db.Missions.Where(m => m.Status == "Закрыто" && m.MissionType == "Заявка" && m.MissionText.Contains("Спам")).CountAsync());
             data.RejectNum.Add(await db.Missions.Where(m => m.Status == "Закрыто" && m.MissionType == "Заявка" && m.MissionText.Contains("Высокая стоимость услуг")).CountAsync());
             data.RejectNum.Add(await db.Missions.Where(m => m.Status == "Закрыто" && m.MissionType == "Заявка" && m.MissionText.Contains("Нет свободной аппаратуры")).CountAsync());
             data.RejectNum.Add(await db.Missions.Where(m => m.Status == "Закрыто" && m.MissionType == "Заявка" && m.MissionText.Contains("Нет свободного реквизита")).CountAsync());
@@ -59,10 +59,7 @@ namespace OXG.CRM_System.Controllers
             foreach (var work in db.Works)
             {
                 data.WorksName.Add(work.Name);
-            }
-            for (int i = 0; i < data.WorksName.Count(); i++)
-            {
-                data.WorksNum.Add(await db.Events.Include(e => e.Works).Where(e => e.Works.Where(w => w.Name == data.WorksName[i]).Count() != 0).CountAsync());
+                data.WorksNum.Add(work.OrdersCount);
             }
 
             data.TypesName = StaticValues.GetEventTypesList();
@@ -71,7 +68,7 @@ namespace OXG.CRM_System.Controllers
                 data.TypesCount.Add(await db.Events.Where(e => e.EventType == data.TypesName[i]).CountAsync());
             }
 
-            
+
             foreach (var item in db.Managers)
             {
                 data.ManagerName.Add(item.Name);
@@ -94,7 +91,7 @@ namespace OXG.CRM_System.Controllers
 
         public IActionResult Manager(string id)
         {
-            return RedirectToAction("Personal","Manager", new { Id=id });
+            return RedirectToAction("Personal", "Manager", new { Id = id });
         }
 
         public async Task<IActionResult> DeleteEmployeer(string id)
@@ -135,17 +132,46 @@ namespace OXG.CRM_System.Controllers
         [HttpPost]
         public async Task<IActionResult> NewTemplate(IFormFile uploadedFile)
         {
-            if (uploadedFile != null && uploadedFile.ContentType.Contains("officedocument.wordprocessingml.document")) 
+            if (uploadedFile != null && uploadedFile.ContentType.Contains("officedocument.wordprocessingml.document"))
             {
                 var path = "/files/" + "template.docx";
                 using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
                 {
                     await uploadedFile.CopyToAsync(fileStream);
                 }
-                return RedirectToAction("Setting");
+                ViewBag.Message = "Файл успешно загружен";
+                return View("Setting");
             }
             ViewBag.BadMessage = "Некорректный файл";
             return View("Setting");
         }
+
+        public async Task<IActionResult> Nonices()
+        {
+            var model = new List<Notice>();
+            foreach (var item in db.Missions.Include(m => m.Employeer).Include(m => m.Event))
+            {
+                if (item.LeftTime.TotalSeconds < 0 && item.Status != "Закрыто")
+                {
+                    var notice = new Notice()
+                    {
+                        NoticeText = $"Пользователь <strong>{item.Employeer.Name} провалил дедлайн задания <strong>{item.MissionType}</strong> по мероприятию <strong>{item.Event.Name}</strong>"
+                    };
+                    model.Add(notice);
+                    continue;
+                };
+                
+                if (item.LeftTime.TotalHours < 2 && item.Status != "Закрыто")
+                {
+                    var notice = new Notice()
+                    {
+                        NoticeText = $"Пользователь <strong>{item.Employeer.Name}</strong> близок к провалу дедлайна задания <strong>{item.MissionType}</strong> по мероприятию <strong>{item.Event.Name}</strong>"
+                    };
+                    model.Add(notice);
+                }
+            }
+            return View();
+        }
+            
     }
-} 
+}

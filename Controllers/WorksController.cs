@@ -11,7 +11,7 @@ namespace OXG.CRM_System.Controllers
 {
     public class WorksController : Controller
     {
-        CRMDbContext db;
+        private readonly CRMDbContext db;
         public WorksController(CRMDbContext context)
         {
             db = context;
@@ -27,6 +27,8 @@ namespace OXG.CRM_System.Controllers
             var eventDb = await db.Events.Include(e => e.Works).Where(e => e.Id == eid).FirstOrDefaultAsync();
             var work = eventDb.Works.Where(w => w.Id == id).FirstOrDefault();
             eventDb.Works.Remove(work);
+            var workT = await db.Works.Where(e => e.Name == work.Name).FirstOrDefaultAsync();
+            workT.OrdersCount--;
             await db.SaveChangesAsync();
             return RedirectToAction("View", "Events", new { id = eid });
         }
@@ -43,17 +45,12 @@ namespace OXG.CRM_System.Controllers
         {
             var eventDb = await db.Events.Include(e => e.Works).Where(e => e.Id == EventID).FirstOrDefaultAsync();
             var work = await db.Works.Where(w => w.Id == WorkId).FirstOrDefaultAsync();
-            if (work.Num!= WorkNum)
-            {
-                var workTemp = new Work() { Name=work.Name, Price=work.Price, Num = WorkNum };
-                eventDb.Works.Add(workTemp);
-                eventDb.TotalPrice += workTemp.Sum;
-            }
-            else
-            {
-                eventDb.Works.Add(work);
-                eventDb.TotalPrice += work.Sum;
-            }
+            var workTemp = new EventWork(work, WorkNum);
+            await db.EventWorks.AddAsync(workTemp);
+            await db.SaveChangesAsync();
+            eventDb.Works.Add(workTemp);
+            eventDb.TotalPrice += workTemp.Sum;
+            work.OrdersCount++;
             await db.SaveChangesAsync();
             return RedirectToAction("View","Events",new {id =EventID });
         }

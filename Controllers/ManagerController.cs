@@ -17,8 +17,8 @@ namespace OXG.CRM_System.Controllers
     [Authorize(Roles = "Менеджер")]
     public class ManagerController : Controller
     {
-        CRMDbContext db;
-        IWebHostEnvironment _appEnvironment;
+        private readonly CRMDbContext db;
+        private readonly IWebHostEnvironment _appEnvironment;
         public ManagerController(CRMDbContext context, IWebHostEnvironment appEnvironment)
         {
             db = context;
@@ -39,7 +39,7 @@ namespace OXG.CRM_System.Controllers
                     item.Status = "Дедлайн провален";
                     continue;
                 }
-                if (item.LeftTime.TotalHours < 1  && item.Status != "Закрыто")
+                if (item.LeftTime.TotalHours < 2  && item.Status != "Закрыто")
                 {
                     item.Status = "Дедлайн близок к провалу";
                     warNum++;

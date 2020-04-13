@@ -30,7 +30,7 @@ namespace OXG.CRM_System.Models
 
         public List<Mission> Missions { get; set; }
 
-        public List<Work> Works { get; set; }
+        public List<EventWork> Works { get; set; }
 
         [ForeignKey("Client")]
         public int? ClientId { get; set; }
