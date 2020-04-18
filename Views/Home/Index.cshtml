@@ -2,23 +2,30 @@
     ViewData["Title"] = "Home Page";
 }
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
+    <div class="jumbotron">
+        <h1 class="display-3">MAGNUS SHOW CRM</h1>
+        <p class="lead">Это демонстрационная версия CRM-системы, предназначенной для EVENT-Агенства.</p>
+        <hr class="my-4">
+        <p>Данная система умеет генерировать договоры для клиентов по заданному шаблону, отправлять договоры и уведомления через Email, контролировать время на выполнение задач менеджерами. Также к данному ПО прилагается бот для группы ВКонтакте, позволяющий клиентам получить прайс и создать заявку для менеджера.</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="https://github.com/OXG-Ex/OXG.CRM-System" role="button">GitHub</a>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col">
+            <blockquote class="blockquote">
+                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus faucibus ornare suspendisse sed nisi lacus sed viverra tellus. Viverra suspendisse potenti nullam ac tortor vitae purus. Sed pulvinar proin gravida hendrerit. Morbi tincidunt augue interdum velit euismod in. Risus viverra adipiscing at in tellus integer feugiat scelerisque varius. Diam volutpat commodo sed egestas egestas fringilla phasellus. In massa tempor nec feugiat nisl. Nam at lectus urna duis. Convallis aenean et tortor at. At consectetur lorem donec massa sapien faucibus et molestie. Nunc faucibus a pellentesque sit amet porttitor eget dolor morbi. Diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet. Dolor purus non enim praesent elementum facilisis leo. In arcu cursus euismod quis viverra nibh cras pulvinar.
+                    <br />
+                Eget nunc lobortis mattis aliquam faucibus. Neque gravida in fermentum et sollicitudin ac orci. Consequat semper viverra nam libero justo. Eros donec ac odio tempor orci dapibus. Mollis aliquam ut porttitor leo a diam sollicitudin. Amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien. Tincidunt arcu non sodales neque sodales ut etiam. Quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor sit. Pellentesque dignissim enim sit amet venenatis. Nam at lectus urna duis convallis convallis tellus. Consectetur a erat nam at lectus urna duis convallis convallis. Nisi lacus sed viverra tellus in hac. Tempus urna et pharetra pharetra massa. Turpis massa sed elementum tempus egestas sed sed risus pretium. Ac turpis egestas sed tempus urna et.</p>
+                <footer class="blockquote-footer"><cite title="Source Title">OXG</cite></footer>
+            </blockquote>
+        </div>
 
-        @if (User.Identity.IsAuthenticated && User.IsInRole("Администратор"))
-        {
-            <p> <a asp-action="Index" asp-controller="Roles">Управление ролями</a></p>
-            <p> <a asp-action="Index" asp-controller="Admin">Администрирование</a></p>
-        }
-
-        @if (User.Identity.IsAuthenticated && User.IsInRole("Менеджер"))
-        {
-            <p> <a asp-action="Personal" asp-controller="Manager">Кабинет менеджера</a></p>
-            <p> <a asp-action="Index" asp-controller="Manager">Рабочая зона менеджера</a></p>
-        }
-
-        @if (User.Identity.IsAuthenticated)
-        {
-            <h1>@User.Identity.Name</h1>
-        }
+        <div class="col">
+            <p class="text-info">
+                Porttitor eget dolor morbi non arcu. Cursus eget nunc scelerisque viverra. Sagittis id consectetur purus ut. Senectus et netus et malesuada fames ac. Ut tortor pretium viverra suspendisse potenti. Nibh nisl condimentum id venenatis a. Diam donec adipiscing tristique risus nec. Pellentesque habitant morbi tristique senectus et netus et. Ornare arcu odio ut sem nulla pharetra diam sit amet. Quis ipsum suspendisse ultrices gravida dictum fusce ut placerat. Quis lectus nulla at volutpat diam ut venenatis tellus. Enim nec dui nunc mattis enim ut tellus elementum. Urna cursus eget nunc scelerisque viverra. Sit amet consectetur adipiscing elit duis tristique sollicitudin nibh. Dictum at tempor commodo ullamcorper a lacus vestibulum sed. Sed lectus vestibulum mattis ullamcorper velit.
+                <br />
+                Senectus et netus et malesuada fames ac turpis. Sed blandit libero volutpat sed cras ornare arcu. Est sit amet facilisis magna etiam. Iaculis nunc sed augue lacus. Mauris rhoncus aenean vel elit scelerisque mauris. Rhoncus aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant. Eget egestas purus viverra accumsan in nisl. Dignissim diam quis enim lobortis scelerisque. Risus pretium quam vulputate dignissim. Lacus vel facilisis volutpat est velit. Vel elit scelerisque mauris pellentesque pulvinar. In tellus integer feugiat scelerisque varius morbi enim nunc faucibus.
+            </p>
+        </div>
     </div>

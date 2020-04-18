@@ -9,9 +9,12 @@ namespace OXG.CRM_System.Models
     {
         public int Id { get; set; }
 
-        public string NoticeText { get; set; }
+        public bool IsViewed { get; set; }
 
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public string EmployeerId { get; set; }
+
+        public int MissionId { get; set; }
+
+        public string Text { get; set; }
     }
 }

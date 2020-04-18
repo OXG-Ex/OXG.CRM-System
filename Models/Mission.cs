@@ -49,6 +49,8 @@ namespace OXG.CRM_System.Models
 
         public string MissionType { get; set; }
 
+        public bool IsFailed { get; set; }
+
         public string EmployeerId { get; set; }
         public User Employeer { get; set; }
 

@@ -28,6 +28,7 @@ namespace OXG.CRM_System.Controllers
         public async Task<IActionResult> Index()
         {
             await DbInitializer.InitializeAsync(userManager, roleManager, db);
+            await WatchDog.FindDeadlineAsync(db);
             return View();
         }
 

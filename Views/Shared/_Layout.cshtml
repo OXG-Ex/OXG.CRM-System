@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - OXG.CRM-System</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OXG.CRM_System</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -27,9 +27,30 @@
                     </ul>
                 </div>
             </div>
+
             @if (User.Identity.IsAuthenticated)
             {
-                <a class="nav-link text-dark" asp-action="Logout" asp-controller="Account">Выход</a><br />
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @User.Identity.Name
+                    </button>
+                    <div align="left" class="dropdown-menu">
+                        @if (User.IsInRole("Администратор"))
+                        {
+                            <a class="dropdown-item" asp-action="Index" asp-controller="Admin">Администрирование</a>
+                            <a class="dropdown-item" asp-action="Index" asp-controller="Roles">Управление ролями</a>
+                        }
+
+                        @if (User.IsInRole("Менеджер"))
+                        {
+                            <a class="dropdown-item" asp-action="Index" asp-controller="Manager">Рабочая зона</a>
+                            <a class="dropdown-item" asp-action="Personal" asp-controller="Manager">Мой аккаунт</a>
+                        }
+                        <div class="dropdown-divider"></div>
+                        <a class=" dropdown-item" asp-action="Logout" asp-controller="Account">Выход</a>
+                    </div>
+                </div>
+                <br />
             }
             else
             {
@@ -42,24 +63,24 @@
     <div class="container" id="LayoutContainer">
         @if (ViewBag.Message != null)
         {
-        <div class="alert alert-dismissible alert-success">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>!</strong> @ViewBag.Message.
-        </div>
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>!</strong> @ViewBag.Message.
+            </div>
         }
         @if (ViewBag.BadMessage != null)
         {
-        <div class="alert alert-dismissible alert-danger">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Проблемы:</strong> @ViewBag.BadMessage.
-        </div>
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Проблемы:</strong> @ViewBag.BadMessage.
+            </div>
         }
         @if (ViewBag.WarningMessage != null)
         {
-        <div class="alert alert-dismissible alert-warning">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Обратите внимание:</strong> @ViewBag.WarningMessage.
-        </div>
+            <div class="alert alert-dismissible alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Обратите внимание:</strong> @ViewBag.WarningMessage.
+            </div>
         }
         <main role="main" class="pb-3">
             @RenderBody()
@@ -83,7 +104,7 @@
             $("#Nstatic3").removeAttr("readonly");
             $("#Nstatic4").removeAttr("readonly");
             $("#saveButton").removeAttr("hidden");
-            $("#editButton").attr("hidden","");
+            $("#editButton").attr("hidden", "");
         });
     </script>
 </body>

@@ -28,6 +28,7 @@ namespace OXG.CRM_System.Controllers
 
         public async Task<IActionResult> Index()
         {
+            await WatchDog.FindDeadlineAsync(db);
             var data = new AdminIndexVM();
             data.Last30Days = new List<string>();
             data.EventsSum = new List<decimal>();
@@ -146,32 +147,11 @@ namespace OXG.CRM_System.Controllers
             return View("Setting");
         }
 
-        public async Task<IActionResult> Nonices()
+        public async Task<IActionResult> Notices()
         {
-            var model = new List<Notice>();
-            foreach (var item in db.Missions.Include(m => m.Employeer).Include(m => m.Event))
-            {
-                if (item.LeftTime.TotalSeconds < 0 && item.Status != "Закрыто")
-                {
-                    var notice = new Notice()
-                    {
-                        NoticeText = $"Пользователь <strong>{item.Employeer.Name} провалил дедлайн задания <strong>{item.MissionType}</strong> по мероприятию <strong>{item.Event.Name}</strong>"
-                    };
-                    model.Add(notice);
-                    continue;
-                };
-                
-                if (item.LeftTime.TotalHours < 2 && item.Status != "Закрыто")
-                {
-                    var notice = new Notice()
-                    {
-                        NoticeText = $"Пользователь <strong>{item.Employeer.Name}</strong> близок к провалу дедлайна задания <strong>{item.MissionType}</strong> по мероприятию <strong>{item.Event.Name}</strong>"
-                    };
-                    model.Add(notice);
-                }
-            }
-            return View();
+            var model = db.Notices;
+            return View(model);
         }
-            
+
     }
 }

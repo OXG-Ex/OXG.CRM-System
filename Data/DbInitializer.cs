@@ -81,10 +81,7 @@ namespace OXG.CRM_System.Data
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(admin, "Администратор");
-                    await userManager.AddToRoleAsync(admin, "Менеджер");
-                    await userManager.AddToRoleAsync(admin, "Дизайнер");
-                    await userManager.AddToRoleAsync(admin, "Техник");
-                    await userManager.AddToRoleAsync(admin, "Артист");
+
                 }
             }
 
