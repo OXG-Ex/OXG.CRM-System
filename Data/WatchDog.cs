@@ -23,10 +23,11 @@ namespace OXG.CRM_System.Data
                     {
                         EmployeerId = item.EmployeerId,
                         Text = "Сотрудник провалил дедлайн",
-                        MissionId = item.Id
+                        MissionId = item.Id,
+                        IsViewed = false
                     };
                     await db.Notices.AddAsync(notice);
-                    await db.SaveChangesAsync();
+                    
                 }
             }
 

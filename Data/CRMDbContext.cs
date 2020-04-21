@@ -41,6 +41,8 @@ namespace OXG.CRM_System.Models
 
         public DbSet<Notice> Notices { get; set; }
 
+        public DbSet<User> Employeers { get; set; }
+
         public DbSet<Work> Works { get; set; }
 
         public DbSet<Requisite> Requisites { get; set; }

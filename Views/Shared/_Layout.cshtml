@@ -9,7 +9,30 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="dropdown">
+                    <img src="~/images/loadGif.gif" alt="Нет фото" class="img-fluid figure-img rounded-circle dropdown-toggle-split" width="70" height="70" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="UserPhoto"  style="margin:1px"/>
+                    <div align="left" class="dropdown-menu">
+                        @if (User.IsInRole("Администратор"))
+                        {
+                            <a class="dropdown-item" asp-action="Index" asp-controller="Admin">Администрирование</a>
+                            <a class=" dropdown-item" asp-action="Notices" asp-controller="Admin">Уведомления <span class="badge bg-danger badge-pill" id="noticeNum"></span></a>
+                            <a class="dropdown-item" asp-action="Index" asp-controller="Roles">Управление ролями</a>
+                        }
+
+                        @if (User.IsInRole("Менеджер"))
+                        {
+                            <a class="dropdown-item" asp-action="Index" asp-controller="Manager">Рабочая зона</a>
+                            <a class=" dropdown-item" asp-action="Index" asp-controller="Manager">Уведомления <span class="badge bg-danger badge-pill" id="noticeNum"></span></a>
+                            <a class="dropdown-item" asp-action="Personal" asp-controller="Manager">Мой аккаунт</a>
+                        }
+                        <div class="dropdown-divider"></div>
+                        <a class=" dropdown-item" asp-action="Logout" asp-controller="Account">Выход</a>
+                    </div>
+                </div>
+            }
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -19,43 +42,19 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            @if (User.Identity.IsAuthenticated)
+            @if (!User.Identity.IsAuthenticated)
             {
-                <div class="dropdown">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        @User.Identity.Name
-                    </button>
-                    <div align="left" class="dropdown-menu">
-                        @if (User.IsInRole("Администратор"))
-                        {
-                            <a class="dropdown-item" asp-action="Index" asp-controller="Admin">Администрирование</a>
-                            <a class="dropdown-item" asp-action="Index" asp-controller="Roles">Управление ролями</a>
-                        }
-
-                        @if (User.IsInRole("Менеджер"))
-                        {
-                            <a class="dropdown-item" asp-action="Index" asp-controller="Manager">Рабочая зона</a>
-                            <a class="dropdown-item" asp-action="Personal" asp-controller="Manager">Мой аккаунт</a>
-                        }
-                        <div class="dropdown-divider"></div>
-                        <a class=" dropdown-item" asp-action="Logout" asp-controller="Account">Выход</a>
-                    </div>
-                </div>
-                <br />
-            }
-            else
-            {
-                <a class="nav-link text-dark" asp-action="Register" asp-controller="Account">Регистрация</a><br />
-                <a class="nav-link text-dark" asp-action="Login" asp-controller="Account">Вход</a>
+                <a class="text-white nav-link " asp-action="Register" asp-controller="Account">Регистрация</a><br />
+                <a class="text-white nav-link " asp-action="Login" asp-controller="Account">Вход</a>
             }
         </nav>
     </header>
@@ -107,5 +106,18 @@
             $("#editButton").attr("hidden", "");
         });
     </script>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script type="text/javascript">
+        var jqxhr = $.get("http://localhost:52720/Home/GetUserPhoto?name=" +'@User.Identity.Name.ToString()');
+        jqxhr.done(function (data) {
+            $('#UserPhoto').attr("src", jqxhr.responseText);
+        });
+        var jqxh = $.get("http://localhost:52720/Home/GetNoticeNum?name=" +'@User.Identity.Name.ToString()');
+            jqxh.done(function (data) {
+                $('#noticeNum').html(jqxh.responseText);
+        });
+        </script>
+    }
 </body>
 </html>

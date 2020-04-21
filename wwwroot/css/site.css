@@ -93,3 +93,17 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.photo {
+    width: 132px;
+    height: 132px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.personPhoto {
+    width: auto;
+    height: 100%;
+    margin: 0 auto;
+}

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OXG.CRM_System.Data;
 using OXG.CRM_System.Models;
 using OXG.CRM_System.Models.Employeers;
 
@@ -27,6 +28,8 @@ namespace OXG.CRM_System.Controllers
 
         public async Task<IActionResult> Index()
         {
+            await WatchDog.FindDeadlineAsync(db);
+
             var user = await db.Managers.Include(e => e.Missions).Include(e => e.Clients).Include(e => e.Contracts).Include(e => e.Events).Where(e => e.Email == User.Identity.Name).FirstOrDefaultAsync();
             var failedNum = 0;
             var warNum = 0;
