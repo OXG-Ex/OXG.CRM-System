@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OXG.CRM_System.Data;
 using OXG.CRM_System.Models;
-
+using OXG.CRM_System.ViewModels;
 
 namespace OXG.CRM_System.Controllers
 {
@@ -20,7 +20,7 @@ namespace OXG.CRM_System.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<User> userManager;
-        CRMDbContext db; 
+        private readonly CRMDbContext db;
         public HomeController(ILogger<HomeController> logger, CRMDbContext context, RoleManager<IdentityRole> role, UserManager<User> user)
         {
             _logger = logger;
@@ -56,20 +56,27 @@ namespace OXG.CRM_System.Controllers
             } 
         }
 
-        public async Task<IActionResult> GetNoticeNum(string name)
+        public async Task<JsonResult> GetNotices(string name)
         {
             var user = await db.Employeers.Where(u => u.Email == name).FirstOrDefaultAsync();
             var id = user.Id;
-            var num = 0;
+            IQueryable<Notice> notices;
             if (!User.IsInRole("Администратор"))
             {
-                num = await db.Notices.Where(n => n.EmployeerId == id && !n.IsViewed).CountAsync();
+                notices = db.Notices.Where(n => n.EmployeerId == id && !n.IsViewed);
             }
             else
             {
-                num = await db.Notices.Where(n =>!n.IsViewed).CountAsync();
+                notices = db.Notices.Where(n => !n.IsViewed);
             }
-            return Content(num.ToString());
+            var model = new List<NoticeVM>();
+            foreach (var item in notices)
+            {
+                model.Add(new NoticeVM(item));
+                model.Last().NoticeNum = await notices.CountAsync();
+            }
+
+            return Json(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

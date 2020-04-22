@@ -15,6 +15,10 @@ namespace OXG.CRM_System.Models
 
         public int MissionId { get; set; }
 
+        public string EmployeerName { get; set; }
+
         public string Text { get; set; }
+
+        public DateTime Deadline { get; set; }
     }
 }

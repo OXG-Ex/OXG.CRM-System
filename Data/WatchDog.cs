@@ -22,9 +22,11 @@ namespace OXG.CRM_System.Data
                     var notice = new Notice
                     {
                         EmployeerId = item.EmployeerId,
-                        Text = "Сотрудник провалил дедлайн",
+                        EmployeerName = item.Employeer.Name,
+                        Text = "Провален дедлайн",
                         MissionId = item.Id,
-                        IsViewed = false
+                        IsViewed = false,
+                        Deadline = item.DeadLine
                     };
                     await db.Notices.AddAsync(notice);
                     

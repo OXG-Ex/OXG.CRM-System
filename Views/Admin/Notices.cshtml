@@ -3,17 +3,18 @@
     ViewData["Title"] = "Notices";
 }
 
-<h1>Notices</h1>
+<h1>Уведомления</h1>
 
-<div class="row" style="margin-left: 1%; ">
-    @foreach (var item in Model)
-    {
-        <div class="card border-info mb-3" title="@item.EmployeerId" id="line_block">
-            <div class="card-body">
-                <h4 class="card-title">@item.Text</h4>
-                <div><a class="btn btn-outline-secondary" asp-action="Close" asp-controller="Mission" asp-route-id="@item.Id">Выполнить</a></div>
+
+@foreach (var item in Model)
+{<div class="row">
+        <div class="col-12">
+            <div class="card border-secondary" title="@item.EmployeerId" id="line_block" with="">
+                <div class="card-body">
+                    <h5 class="card-title">1232123</h5>
+                </div>
             </div>
         </div>
-    }
-</div>
-
+    </div>
+    <br />
+}
