@@ -18,7 +18,7 @@
                         @if (User.IsInRole("Администратор"))
                         {
                             <a class="dropdown-item" asp-action="Index" asp-controller="Admin">Администрирование</a>
-                            <p class=" dropdown-item" data-toggle="modal" data-target="#NoticesModal" id="notices">Уведомления <span class="badge bg-danger badge-pill" id="noticeNum">-0</span></p>
+                            <p class=" dropdown-item" data-toggle="modal" data-target="#NoticesModal" id="notices">Уведомления <span class="badge bg-danger badge-pill" id="noticeNum">0</span></p>
                             <a class="dropdown-item" asp-action="Index" asp-controller="Roles">Управление ролями</a>
                         }
 
@@ -95,6 +95,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+    <!-- Скрипт удаления атрибутов readonly-->
     <script>
         $('#editButton').click(function () {
             $("#Nstatic").removeAttr("readonly");
@@ -106,33 +107,35 @@
             $("#editButton").attr("hidden", "");
         });
     </script>
+    <!-- Скрипт подгрузки фото и уведомлений -->
     @if (User.Identity.IsAuthenticated)
     {
         <script type="text/javascript">
-        var jqxhr = $.get("http://localhost:52720/Home/GetUserPhoto?name=" +'@User.Identity.Name.ToString()');
+        var jqxhr = $.get("http://localhost:52720/api/AJAX/GetUserPhoto?name=" +'@User.Identity.Name.ToString()');
         jqxhr.done(function (data) {
             $('#UserPhoto').attr("src", jqxhr.responseText);
         });
-        @*var jqxh = $.get("http://localhost:52720/Home/GetNoticeNum?name=" +'@User.Identity.Name.ToString()');
-            jqxh.done(function (data) {
-                $('#noticeNum').html(jqxh.responseText);
-            });*@
 
-            //$./*('#notices').bind('click',*/ function (e) {
-                $.getJSON("http://localhost:52720/Home/GetNotices?name=" + '@User.Identity.Name.ToString()', function (data) {
-                    for (var i in data) {
-                        var notice = data[i];
-                        $('#noticeNum').html(notice.noticeNum);
-                        $('#loadImg').remove();
-                        $('#modalNotices').append('<div class="row"><div class="col-12"><div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="width:inherit"><div class="toast-header"><strong class="mr-auto">' + notice.employeerName + '</strong><small>' + notice.agoTime + '</small><button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="toast-body">' + notice.text + ' по <bold><a href=http://localhost:52720/Admin/ViewMissio?name=' + notice.missionId + ' > задаче</a></bold> ' + '</div></div></div></div>');
-                    }
+         $.getJSON("http://localhost:52720/api/AJAX/GetNotices?name=" + '@User.Identity.Name.ToString()', function (data) {
+            for (var i in data) {
+                var notice = data[i];
+                  $('#noticeNum').html(notice.noticeNum);
+                  $('#loadImg').remove();
+                  $('#modalNotices').append('<div class="row"><div class="col-12" align="center"><div class="toast show" align="left" role="alert" aria-live="assertive" aria-atomic="true" style="width:inherit"><div class="toast-header"><strong class="mr-auto">' + notice.employeerName + '</strong><small>' + notice.agoTime + '</small></div><div class="toast-body">' + notice.text + ' по <bold><a href=http://localhost:52720/Admin/ViewMissio?name=' + notice.missionId + ' > задаче</a></bold> ' + '</div></div></div></div><br/>');
+            }
+         });
+
+            $(function () {
+                $('#ViewedBtn').bind('click', function (e) {
+                    $.get("http://localhost:52720/api/AJAX/SetViewed?name=" + '@User.Identity.Name.ToString()');
+                    $('#modalNotices').html('');
+                    $('#noticeNum').html(0);
                 });
-            //});
-
+            });
         </script>
-
     }
-    <!-- Modal -->
+
+    <!-- Модальное окно уведомлений -->
     <div class="modal fade" id="NoticesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
