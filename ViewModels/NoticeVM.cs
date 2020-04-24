@@ -14,8 +14,6 @@ namespace OXG.CRM_System.ViewModels
 
         public string AgoTime { get; set; }
 
-        public int NoticeNum { get; set; }
-
         public string EmployeerId { get; set; }
 
         public int MissionId { get; set; }

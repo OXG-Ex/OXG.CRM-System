@@ -1,0 +1,70 @@
+﻿@model IEnumerable<String>
+@{
+    ViewData["Title"] = "Услуги";
+}
+<div class="row">
+    <div class="col-5" >
+        <div class="card border-info mb-3">
+            <div class="card-header">Услуги</div>
+            <div class="card-body" style="min-height:350px">
+                <div class="form-group">
+                    <select multiple="" class="form-control" id="worksSelect" style="min-height:350px">
+                        @foreach (var item in Model)
+                        {
+                            <option>@item</option>
+                        }
+                    </select>
+                    <small class="form-text text-muted">Для создания новой услуги введите наименование отличное от уже существующей услуги</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-7">
+        <div class="card border-info mb-3">
+            <div class="card-header">Редактирование  <img src="~/images/loadGif.gif" alt="\\\Loading///" class="img-fluid" width="30" height="30" id="Loading" /></div>
+            <div class="card-body" style="min-height:350px">
+                <form method="post" id="workEditing">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Название услуги</label>
+                        <input name="WorkName" type="text" class="form-control" id="inputName" aria-describedby="emailHelp" placeholder="Введите название" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Стоимость услуги</label>
+                        <input name="WorkPrice" type="number" class="form-control" id="inputPrice" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleTextarea">Описание услуги</label>
+                        <textarea name="WorkDescription" class="form-control" id="inputDescription" rows="2" style="margin-top: 0px; margin-bottom: 0px; height: 168px;"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-6" align="left">
+                            <input asp-action="EditWork" type="submit" value="Сохранить" class="btn btn-outline-info" />
+                        </div>
+                        <br />
+                        <div class="col-6" align="right">
+                            <input type="submit" asp-action="DeleteWork" class="btn btn-outline-danger" value="Удалить" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Скрипт подгрузки информации об услуге*@
+<script>
+    window.onload = function () {
+        $('#Loading').hide();
+        $('#worksSelect').bind('click', function (e) {
+            $('#Loading').show();
+            $('#workEditing').hide();
+            $.getJSON("http://localhost:52720/api/AJAX/GetWork?name=" + $('#worksSelect').val(), function (data) {
+                $('#inputName').val(data.name);
+                $('#inputPrice').val(data.price);
+                $('#inputDescription').html(data.description);
+                $('#Loading').hide();
+                $('#workEditing').show();
+            });
+        });
+    };
+</script>

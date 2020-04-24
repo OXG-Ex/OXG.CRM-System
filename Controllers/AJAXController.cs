@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -72,13 +73,32 @@ namespace OXG.CRM_System.Controllers
                 notices = db.Notices.Where(n => !n.IsViewed);
             }
             var model = new List<NoticeVM>();
-            foreach (var item in notices)
-            {
-                model.Add(new NoticeVM(item));
-                model.Last().NoticeNum = await notices.CountAsync();
-            }
-
             return new JsonResult(model);
+        }
+
+        [HttpGet]
+        public async Task<ContentResult> GetNoticesNum(string name)
+        {
+            var user = await db.Employeers.Where(u => u.Email == name).FirstOrDefaultAsync();
+            var id = user.Id;
+            int notices;
+            if (!User.IsInRole("Администратор"))
+            {
+                notices =await db.Notices.Where(n => n.EmployeerId == id && !n.IsViewed).CountAsync();
+            }
+            else
+            {
+                notices =await db.Notices.Where(n => !n.IsViewed).CountAsync();
+            }
+            return Content(notices.ToString());
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetWork(string name)
+        {
+            var work = await db.Works.Where(u => u.Name == name).FirstOrDefaultAsync();
+            Thread.Sleep(1000);
+            return new JsonResult(work);
         }
 
         [HttpGet]

@@ -112,6 +112,41 @@ namespace OXG.CRM_System.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Works()
+        {
+            var model = db.Works.Select(e => e.Name);
+            return View(model);
+        }
+
+        public async Task<IActionResult> EditWork(string WorkName, decimal WorkPrice, string WorkDescription)
+        { 
+            var work = await db.Works.Where(w => w.Name == WorkName).FirstOrDefaultAsync();
+            if (work!=null)
+            {
+                work.Price = WorkPrice;
+                work.Description = WorkDescription;
+                await db.SaveChangesAsync();
+            }
+            else
+            {
+                var wrk = new Work();
+                wrk.Name = WorkName;
+                wrk.Price = WorkPrice;
+                wrk.Description = WorkDescription;
+                await db.Works.AddAsync(wrk);
+                await db.SaveChangesAsync();
+            }
+            return RedirectToAction("Works");
+        }
+
+        public async Task<IActionResult> DeleteWork(string WorkName)
+        {
+            var work = await db.Works.Where(w => w.Name == WorkName).FirstOrDefaultAsync();
+            db.Works.Remove(work);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Works");
+        }
+
         [HttpPost]
         public IActionResult SaveEmailSetting(AdminSettingVM model)
         {
