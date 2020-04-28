@@ -8,10 +8,10 @@
     <div class="col-lg-4">
         @foreach (var item in Model.Managers)
         {
-            <div class="card border-primary bg-primary text-white mb-3" style="max-width: 20rem;">
+            <div class="card border-primary bg-primary text-white mb-3" style="max-width: 20rem;" data-toggle="modal" data-target="#EmployeerModal">
                 <div class="card-header"><img src="@item.Photo" width="50px" height="50px" class="img-fluid figure-img rounded" alt="Alternate Text" /> </div>
                 <div class="card-body">
-                    <a asp-action="Manager" asp-route-id="@item.Id" style="color:white"><h4 class="card-title">@item.Name</h4></a>
+                    <a @*asp-action="Manager" asp-route-id="@item.Id"*@ style="color:white"><h4 class="card-title">@item.Name</h4></a>
                 </div>
             </div>
         }
@@ -19,10 +19,10 @@
     <div class="col-lg-4">
         @foreach (var item in Model.Artists)
         {
-            <div class="card border-info bg-info text-white mb-3" style="max-width: 20rem;">
+            <div class="card border-info bg-info text-white mb-3" style="max-width: 20rem;" data-toggle="modal" data-target="#EmployeerModal">
                 <div class="card-header"><img src="@item.Photo" width="50px" height="50px" class="img-fluid figure-img rounded" alt="Alternate Text" /></div>
                 <div class="card-body">
-                    <a asp-action="Artist" asp-route-id="@item.Id" style="color:white"><h4 class="card-title">@item.Name</h4></a>
+                    <a @*asp-action="Artist" asp-route-id="@item.Id"*@ style="color:white"><h4 class="card-title">@item.Name</h4></a>
                 </div>
             </div>
         }
@@ -30,16 +30,82 @@
     <div class="col-lg-4">
         @foreach (var item in Model.Technics)
         {
-            <div class="card border-secondary bg-secondary text-white mb-3" style="max-width: 20rem;">
+            <div class="card border-secondary bg-secondary text-white mb-3" style="max-width: 20rem;" data-toggle="modal" data-target="#EmployeerModal">
                 <div class="card-header"><img src="@item.Photo" width="50px" height="50px" class="img-fluid figure-img rounded" alt="Alternate Text" /></div>
                 <div class="card-body">
-                    <a asp-action="Technic" asp-route-id="@item.Id" style="color:white"><h4 class="card-title">@item.Name</h4></a>
+                    <a @*asp-action="Technic" asp-route-id="@item.Id"*@ style="color:white"><h4 class="card-title">@item.Name</h4></a>
                 </div>
             </div>
         }
     </div>
 </div>
 
-<script>
 
+<script>
+    window.onload = function () {
+        $('#loadImg').hide();
+        $('.card').bind('click', function (e) {
+             $("#modalEmp").hide();
+             $('#loadImg').show();
+            $.getJSON("/api/AJAX/GetEmployeer?name=" + $(this).children(".card-body").children("a").children(".card-title").html(), function (data) {
+                $("#EmpName").html(data.name);
+                $("#delBtn").attr("href","/Admin/DeleteEmployeer?id=" + data.id);
+                $("#EmpPhoto").attr("src", data.photo);
+                $("#MissionNum").html(data.missionNum);
+                $("#FailedNum").html(data.failedNum);
+                $("#Phone").val(data.phone);
+                $("#Email").val(data.email);
+             $("#modalEmp").show();
+             $('#loadImg').hide();
+             });
+        });
+    };
 </script>
+
+<div class="modal fade" id="EmployeerModal" tabindex="-1" role="dialog" @*aria-labelledby="EmpName"*@ aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong id="EmpName">Сотрудник</strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <img src="~/images/loadGif2.gif" id="loadImg" alt="Alternate Text" />
+            <div class="modal-body" id="modalEmp">
+                <div>
+                    <div class="row">
+                        <div class="col-5">
+                            <img id="EmpPhoto" src="~/images/defaultPhoto.png" class="img-fluid" alt="Alternate Text" />
+                        </div>
+                        <div class="col-7">
+                            <h5><strong>Задачи</strong><span class="badge bg-warning badge-pill" id="MissionNum">0</span></h5>
+                            <br />
+                            <h5><strong>Проваленные</strong><span class="badge bg-secondary badge-pill" id="FailedNum">0</span></h5>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group row">
+                                <label for="Phone" class="col-sm-3 col-form-label">Телефон:</label>
+                                <div class="col-sm-9">
+                                    <input readonly="" class="form-control-plaintext" id="Phone" value="8-999-999-99-99">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Email" class="col-sm-3 col-form-label">Email:</label>
+                                <div class="col-sm-9">
+                                    <input readonly="" class="form-control-plaintext" id="Email" value="empty@empty.com">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="/Admin/DeleteEmployeer" class="btn btn-outline-danger" id="delBtn">Удалить сотрудника</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@model OXG.CRM_System.Models.Mission
+@{
+    ViewData["Title"] = "Задача";
+}
+
+<div class="card border-primary mb-3">
+    <div class="card-header">Задача №@Model.Id</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="Textarea">Описание</label>
+                    <text class="form-control" id="Textarea" >@Model.MissionText</text>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col">
+                <div class="form-group row">
+                    <label for="Name" class="col-sm-2 col-form-label">Сотрудник</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly="" class="form-control-plaintext" id="Name" value="@Model.Employeer.Name">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="DeadLine" class="col-sm-2 col-form-label">Дедлайн</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly="" class="form-control-plaintext" id="DeadLine" value="@Model.DeadLine.ToShortDateString()">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="LeftTime" class="col-sm-2 col-form-label">Осталось времени</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly="" class="form-control-plaintext" id="LeftTime" value="@Model.GetLeftTime()">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="LeftTime" class="col-sm-2 col-form-label">Выполнено во время</label>
+                    <div class="col-sm-10">
+                        @if (Model.IsFailed)
+                        {
+                            <input type="text" readonly="" class="form-control-plaintext" id="LeftTime" value="Нет">
+                        }
+                        else
+                        {
+                            <input type="text" readonly="" class="form-control-plaintext" id="LeftTime" value="Да">
+                        }
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="Status" class="col-sm-2 col-form-label">Статус</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly="" class="form-control-plaintext" id="Status" value="@Model.Status">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

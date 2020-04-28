@@ -90,11 +90,6 @@ namespace OXG.CRM_System.Controllers
             return View(data);
         }
 
-        public IActionResult Manager(string id)
-        {
-            return RedirectToAction("Personal", "Manager", new { Id = id });
-        }
-
         public async Task<IActionResult> DeleteEmployeer(string id)
         {
             var emp = await db.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
@@ -115,6 +110,13 @@ namespace OXG.CRM_System.Controllers
         public async Task<IActionResult> Works()
         {
             var model = db.Works.Select(e => e.Name);
+            return View(model);
+        }
+
+        public async Task<IActionResult> Clients()
+        {
+            var model = db.Clients;
+            model.Remove(model.Where(m => m.Name=="Temp").FirstOrDefault());
             return View(model);
         }
 

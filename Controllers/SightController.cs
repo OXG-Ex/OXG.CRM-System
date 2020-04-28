@@ -13,8 +13,8 @@ namespace OXG.CRM_System.Controllers
     [Authorize]
     public class SightController : Controller
     {
-        CRMDbContext db;
-        IWebHostEnvironment _appEnvironment;
+        private readonly CRMDbContext db;
+        private readonly IWebHostEnvironment _appEnvironment;
         public SightController(CRMDbContext context, IWebHostEnvironment appEnvironment)
         {
             db = context;
@@ -24,6 +24,12 @@ namespace OXG.CRM_System.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Mission(int id)
+        {
+            var mission = await db.Missions.Include(m => m.Employeer).Where(m => m.Id == id).FirstOrDefaultAsync();
+            return View(mission);
         }
 
         public async Task<IActionResult> Manager(string id)
@@ -36,6 +42,12 @@ namespace OXG.CRM_System.Controllers
         {
             var contract = await db.Contracts.Where(c => c.Id == id).FirstOrDefaultAsync();
             return File(contract.Path, "application / docx", contract.Name);
+        }
+
+        public async Task<IActionResult> Client(int id)
+        {
+            var client = await db.Clients.Include(m => m.ClientVK).Include(m => m.Events).Include(m => m.Manager).Where(m => m.Id == id).FirstOrDefaultAsync();
+            return View(client);
         }
     }
 }

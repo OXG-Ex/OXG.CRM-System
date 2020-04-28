@@ -58,7 +58,7 @@
         $('#worksSelect').bind('click', function (e) {
             $('#Loading').show();
             $('#workEditing').hide();
-            $.getJSON("http://localhost:52720/api/AJAX/GetWork?name=" + $('#worksSelect').val(), function (data) {
+            $.getJSON("/api/AJAX/GetWork?name=" + $('#worksSelect').val(), function (data) {
                 $('#inputName').val(data.name);
                 $('#inputPrice').val(data.price);
                 $('#inputDescription').html(data.description);

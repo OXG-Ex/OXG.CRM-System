@@ -18,6 +18,8 @@ namespace OXG.CRM_System.ViewModels
 
         public int MissionId { get; set; }
 
+        public bool Viewed { get; set; }
+
         public NoticeVM()
         {
 
@@ -29,6 +31,7 @@ namespace OXG.CRM_System.ViewModels
             Text = notice.Text;
             EmployeerId = notice.EmployeerId;
             MissionId = notice.MissionId;
+            Viewed = notice.IsViewed;
             var timeSpan = DateTime.Now - notice.Deadline;
             if (timeSpan.TotalMinutes<120)
             {

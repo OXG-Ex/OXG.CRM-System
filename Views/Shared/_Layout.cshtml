@@ -6,6 +6,7 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
 </head>
 <body>
     <header>
@@ -86,6 +87,7 @@
         </main>
     </div>
 
+    <br />
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2020 - OXG.CRM-System - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -111,19 +113,19 @@
     @if (User.Identity.IsAuthenticated)
     {
         <script type="text/javascript">
-        var jqxhr = $.get("http://localhost:52720/api/AJAX/GetUserPhoto?name=" +'@User.Identity.Name.ToString()');
+        var jqxhr = $.get("/api/AJAX/GetUserPhoto?name=" +'@User.Identity.Name.ToString()');
         jqxhr.done(function (data) {
             $('#UserPhoto').attr("src", jqxhr.responseText);
         });
 
-        var jqxh = $.get("http://localhost:52720/api/AJAX/GetNoticesNum?name=" + '@User.Identity.Name.ToString()');
+        var jqxh = $.get("/api/AJAX/GetNoticesNum?name=" + '@User.Identity.Name.ToString()');
             jqxh.done(function (data) {
                 $('#noticeNum').html(jqxh.responseText);
         });
 
             $(function () {
                 $('#ViewedBtn').bind('click', function (e) {
-                    $.get("http://localhost:52720/api/AJAX/SetViewed?name=" + '@User.Identity.Name.ToString()');
+                    $.get("/api/AJAX/SetViewed?name=" + '@User.Identity.Name.ToString()');
                     $('#modalNotices').html('');
                     $('#noticeNum').html(0);
                 });
@@ -131,11 +133,12 @@
 
             $(function () {
                 $('#notices').bind('click', function (e) {
-                    $.getJSON("http://localhost:52720/api/AJAX/GetNotices?name=" + '@User.Identity.Name.ToString()', function (data) {
-            for (var i in data) {
-                var notice = data[i];
-                $('#loadImg').hide();
-                  $('#modalNotices').append('<div class="row"><div class="col-12" align="center"><div class="toast show" align="left" role="alert" aria-live="assertive" aria-atomic="true" style="width:inherit"><div class="toast-header"><strong class="mr-auto">' + notice.employeerName + '</strong><small>' + notice.agoTime + '</small></div><div class="toast-body">' + notice.text + ' по <bold><a href=http://localhost:52720/Admin/ViewMissio?name=' + notice.missionId + ' > задаче</a></bold> ' + '</div></div></div></div><br/>');
+                    $.getJSON("/api/AJAX/GetNotices?name=" + '@User.Identity.Name.ToString()', function (data) {
+                        $('#modalNotices').html('');
+                        for (var i in data) {
+                            var notice = data[i];
+                            $('#loadImg').hide();
+                            $('#modalNotices').append('<div class="row"><div class="col-12" align="center"><div class="toast show" align="left" role="alert" aria-live="assertive" aria-atomic="true" style="width:inherit"><div class="toast-header"><strong class="mr-auto">' + notice.employeerName + '</strong><small>' + notice.agoTime + '</small></div><div class="toast-body">' + notice.text + ' по <bold><a href=/Sight/Mission?id=' + notice.missionId + ' > задаче</a></bold> ' + '</div></div></div></div><br/>');
                         }
                         if (data.length === 0) {
                             $('#loadImg').hide();

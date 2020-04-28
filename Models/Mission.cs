@@ -56,5 +56,11 @@ namespace OXG.CRM_System.Models
 
         public int EventId { get; set; }
         public Event Event { get; set; }
+
+        public string GetLeftTime()
+        {
+            var s =$"{LeftTime.Hours} часов {LeftTime.Minutes} минут";
+            return s;
+        }
     }
 }

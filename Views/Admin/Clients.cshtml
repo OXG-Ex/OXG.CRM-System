@@ -1,0 +1,14 @@
+﻿@model IEnumerable<OXG.CRM_System.Models.Client>
+@{
+    ViewData["Title"] = "Клиенты";
+}
+
+<table class="table table-hover table-striped">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th scope="row">Клиент</th>
+            <td><a asp-controller="Sight" asp-action="Client" asp-route-id="@item.Id">@item.Name</a></td>
+        </tr>
+    }
+</table>

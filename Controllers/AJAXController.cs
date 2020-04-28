@@ -73,6 +73,11 @@ namespace OXG.CRM_System.Controllers
                 notices = db.Notices.Where(n => !n.IsViewed);
             }
             var model = new List<NoticeVM>();
+            foreach (var item in notices)
+            {
+                var notice = new NoticeVM(item);
+                model.Add(notice);
+            }
             return new JsonResult(model);
         }
 
@@ -97,8 +102,15 @@ namespace OXG.CRM_System.Controllers
         public async Task<JsonResult> GetWork(string name)
         {
             var work = await db.Works.Where(u => u.Name == name).FirstOrDefaultAsync();
-            Thread.Sleep(1000);
             return new JsonResult(work);
+        }
+
+
+        [HttpGet]
+        public async Task<JsonResult> GetEmployeer(string name)
+        {
+            var emp = await db.Employeers.Include(u => u.Missions).Where(u => u.Name == name).FirstOrDefaultAsync();
+            return new JsonResult(new AdminEmployeerVM(emp));
         }
 
         [HttpGet]
