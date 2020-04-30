@@ -33,6 +33,7 @@ namespace OXG.CRM_System.Controllers
         {
             await DbInitializer.InitializeAsync(userManager, roleManager, db);
             await WatchDog.FindDeadlineAsync(db);
+            await WatchDog.FindNewRequestAsync(db);
             await db.SaveChangesAsync();
             return View();
         }

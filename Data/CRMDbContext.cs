@@ -46,5 +46,22 @@ namespace OXG.CRM_System.Models
         public DbSet<Work> Works { get; set; }
 
         public DbSet<Requisite> Requisites { get; set; }
+
+
+        public Manager GetMustFreedomManager()
+        {
+            var managers = Managers.Include(m => m.Missions);
+            var min = 999999;
+            var id = "";
+            foreach (var item in managers)
+            {
+                if (item.Missions.Count < min)
+                {
+                    id = item.Id;
+                }
+            }
+            var manager = managers.Where(m => m.Id == id).FirstOrDefault();
+            return manager;
+        }
     }
 }

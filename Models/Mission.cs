@@ -33,6 +33,8 @@ namespace OXG.CRM_System.Models
                         return "/images/icons/Custom.png";
                     case "Заявка":
                         return "/images/icons/VK.png";
+                    case "Автоматическая заявка":
+                        return "/images/icons/Android.png";
                     default:
                         return "/images/icons/Check Box.png";
                 }

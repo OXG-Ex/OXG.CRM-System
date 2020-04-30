@@ -64,7 +64,7 @@
                         {
                             @foreach (var item in Model.Missions)
                             {
-                                @if (item.Status != "Закрыто" && item.MissionType == "Заявка")
+                                @if (item.Status != "Закрыто" && item.MissionType == "Заявка" || item.MissionType == "Автоматическая заявка")
                                 {
 
                                     <tr>
@@ -83,10 +83,12 @@
     </div>
 </div>
 
+
+
 <div class="row" style="margin-left: 1%; ">
     @foreach (var item in Model.Missions)
     {
-        if (item.MissionType != "Заявка" && item.Status != "Закрыто")
+        if (item.MissionType != "Заявка" && item.MissionType != "Автоматическая заявка" && item.Status != "Закрыто")
         {
             <div class="card border-info mb-3" style="max-width: 20rem;" title="@item.Status" id="line_block">
                 <div class="card-header"><img src="@item.Picture" alt="type" width="28" height="28" /> </div>
