@@ -31,7 +31,6 @@
             <div class="form-group">
                 <label for="EventType">Тип мероприятия:</label>
                 <select asp-for="EventType" asp-items="ViewBag.EventTypes" class="custom-select" id="EventType">
-                    
                 </select>
             </div>
         </div>
@@ -40,7 +39,10 @@
         <div class="col">
             <div class="form-group">
                 <label for="ClientName">Имя клиента</label>
-                <input asp-for="ClientName" class="form-control" id="ClientName" placeholder="Введите название">
+                <div class="row">
+                    <div class="col-10"><input asp-for="ClientName" class="form-control" id="ClientName" placeholder="Введите название"></div>
+                    <div class="col-2"><a href="#" data-toggle="modal" data-target="#ClientsModal" id="clientsDB">Из БД</a></div>
+                </div>
                 <span asp-validation-for="ClientName"></span>
             </div>
             <div class="form-group">
@@ -65,3 +67,83 @@
     <div asp-validation-summary="ModelOnly"></div>
     <input asp-action="New" type="submit" class="btn btn-success btn-lg btn-block" value="Создать" />
 </form>
+
+
+
+<div class="modal fade" id="ClientsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Клиенты</h5>
+                <img src="~/images/loadGif.gif" alt="\\\Loading///" class="img-fluid" width="30" height="30" id="imgLoad" />
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalNotices">
+                <img src="~/images/loadGif2.gif" alt="Alternate Text" class="img-fluid" id="loadImg" />
+
+                <table class="table table-hover" id="tableClients">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Имя</th>
+                            <th scope="col">Телефон</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tBodyClients">
+                        <tr class="table-light">
+                            <th scope="row">Active</th>
+                            <td>Column content</td>
+                            <td>Column content</td>
+                            <td>Column content</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            @*<div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="ViewedBtn">Просмотрено</button>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.onload = function () {
+        $(function () {
+            $('#tableClients').hide();
+            $('#imgLoad').hide();
+
+            
+            $('#clientsDB').bind('click', function (e) {
+                $.getJSON("/api/AJAX/GetClients", function (data) {
+                    $('#tBodyClients').html('');
+                    for (var i in data) {
+                        var client = data[i];
+                        $('#loadImg').hide();
+                        $('#tBodyClients').append('<tr  class="selectClient"><th scope = "row" ><a href=#>' + client.id + '</a></th ><td>' + client.name + '</td><td>' + client.phone + '</td><td>' + client.email + '</td></tr >');
+                    }
+                    if (data.length === 0) {
+                        $('#loadImg').hide();
+                    }
+                    $('#tableClients').show();
+
+                    $('.selectClient').bind('click', function (e) {
+                        $('#imgLoad').show();
+                        $.getJSON("/api/AJAX/GetClient?id=" + $(this).children("th").children("a").html(), function (data) {
+                            $("#ClientName").val(data.name);
+                            $("#ClientDescription").text(data.description);
+                            $("#ClientPhone").val(data.phone);
+                            $("#ClientEmail").val(data.email);
+                            $('#imgLoad').hide();
+                        });
+                    });
+                });
+
+            });
+
+        });
+    };
+</script>

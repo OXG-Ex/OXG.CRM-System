@@ -1,0 +1,76 @@
+﻿@model OXG.CRM_System.Models.Employeers.Artist
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Artist/Index</h1>
+
+
+<div class="row">
+    <div class=" col-lg-6">
+        <div class="card border-info mb-3 ">
+            <div class="card-header">Ожидают подтверждения</div>
+            <div class="card-body table-responsive" style="height:400px">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Дата</th>
+                            <th scope="col">Время начала</th>
+                            <th scope="col">Мероприятие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Missions)
+                        {
+                            if (item.Event.Status.Contains("Ожидает согласования"))
+                            {
+                                <tr class="table-light">
+                                    <td>@item.DeadLine.ToShortDateString()</td>
+                                    <td>@item.Event.DeadLine.ToShortTimeString()</td>
+                                    <td><a asp-controller="Events" asp-action="View" asp-route-id="@item.Event.Id">@item.Event.Name</a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card border-success mb-3 ">
+            <div class="card-header">Подтверждённые</div>
+            <div class="card-body table-responsive" style="height:400px">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Дата</th>
+                            <th scope="col">Время начала</th>
+                            <th scope="col">Мероприятие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Missions)
+                        {
+                            if (!item.Event.Status.Contains("Ожидает согласования"))
+                            {
+                                <tr class="table-light">
+                                    <td>@item.DeadLine.ToShortDateString()</td>
+                                    <td>@item.Event.DeadLine.ToShortTimeString()</td>
+                                    <td><a asp-controller="Events" asp-action="View" asp-route-id="@item.Event.Id">@item.Event.Name</a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var container = document.getElementById('LayoutContainer')
+    container.classList.remove('container')
+</script>

@@ -65,7 +65,8 @@ namespace OXG.CRM_System.Controllers
                 if (clientDb == null)
                 {
                    clientDb = new Client(model);
-                }    
+                }
+                clientDb.Description = model.ClientDescription;
                 var manager = await db.Managers.Where(e => e.Email == User.Identity.Name).FirstOrDefaultAsync();
                 if (model.FromRequest == true)
                 {

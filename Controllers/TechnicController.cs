@@ -19,10 +19,11 @@ namespace OXG.CRM_System.Controllers
             db = context;
         }
 
-
-        public IActionResult Index()
+        [Authorize(Roles = "Техник")]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var tech = await db.Technics.Include(t => t.Missions).ThenInclude(m => m.Event).ThenInclude(e => e.Client).Where(t => t.Email == User.Identity.Name).FirstOrDefaultAsync();
+            return View(tech);
         }
 
         [Authorize(Roles = "Менеджер")]
@@ -39,6 +40,18 @@ namespace OXG.CRM_System.Controllers
         {
             var technic = await db.Technics.Where(t => t.Id == TechnicId).FirstOrDefaultAsync();
             var eventDb = await db.Events.Include(e => e.Technic).Include(e => e.Missions).Where(t => t.Id == eventId).FirstOrDefaultAsync();
+            eventDb.Status = "Ожидает согласования техника";
+            var mission = new Mission()
+            {
+                Employeer = technic,
+                CreatedDate = DateTime.Now,
+                DeadLine = DateTime.Now.AddDays(7),
+                Event = eventDb,
+                MissionType = "Согласование площадки",
+                MissionText = "Согласовать соответствие площадки требованиям для мероприятия"
+            };
+
+            await db.Missions.AddAsync(mission);
 
             if (technic != null && eventDb != null)
             {

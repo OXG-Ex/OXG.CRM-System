@@ -22,6 +22,22 @@ namespace OXG.CRM_System.Controllers
         }
 
         [HttpGet]
+        public async Task<JsonResult> GetClient(int id)
+        {
+            var client = await db.Clients.Where(c => c.Id == id).FirstOrDefaultAsync();
+            return new JsonResult(client);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetClients()
+        {
+            var clients = db.Clients;
+            var client = await db.Clients.Where(c => c.Name == "Temp").FirstOrDefaultAsync();
+            clients.Remove(client);
+            return new JsonResult(clients);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetUserPhoto(string name)
         {
             var user = await db.Employeers.Where(u => u.Email == name).FirstOrDefaultAsync();

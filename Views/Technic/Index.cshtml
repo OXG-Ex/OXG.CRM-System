@@ -1,0 +1,29 @@
+﻿@model OXG.CRM_System.Models.Employeers.Technic
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Technic/Index</h1>
+
+<table class="table table-bordered table-hover table-responsive-lg">
+    <thead>
+        <tr>
+            <th scope="col">Тип</th>
+            <th scope="col">Задача</th>
+            <th scope="col">Клиент</th>
+            <th scope="col">Мероприятие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Missions)
+        {
+            <tr class="table-light">
+                <th><img class="img-fluid" width="40" height="40" src="@item.Picture" alt="picture" /></th>
+                <td>@item.MissionText</td>
+                <td><a asp-controller="Sight" asp-action="Client" asp-route-id="@item.Event.Client.Id" id="client">@item.Event.Client.Name</a></td>
+                <td><a asp-controller="Events" asp-action="View" asp-route-id="@item.Event.Id">@item.Event.Name</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

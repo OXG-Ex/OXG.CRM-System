@@ -80,7 +80,7 @@ namespace OXG.CRM_System.Controllers
         {
             var mission = await db.Missions.Include(e => e.Employeer).Include(e => e.Event).Where(e => e.Id == id).FirstOrDefaultAsync();
             var type = mission.MissionType;
-            if (type == "Заявка")
+            if (type == "Заявка" || type == "Автоматическая заявка")
             {
                 return View("CloseRequest", mission);
             }

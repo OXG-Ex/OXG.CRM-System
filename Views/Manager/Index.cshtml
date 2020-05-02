@@ -1,6 +1,6 @@
 ﻿@model OXG.CRM_System.Models.Employeers.Manager
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Задачи";
 }
 
 <style>
@@ -36,7 +36,7 @@
                                     <th scope="row"><a asp-action="View" asp-controller="Events" asp-route-id="@item.Id">@item.Name</a></th>
                                     <td>@item.DeadLine.ToLongDateString()</td>
                                     <td>@item.Status</td>
-                                    <td><a asp-action="View" asp-controller="Clients" asp-route-id="@item.Client.Id">@item.Client.Name</a></td>
+                                    <td><a asp-action="Client" asp-controller="Sight" asp-route-id="@item.Client.Id">@item.Client.Name</a></td>
                                 </tr>
                             }
                         }
@@ -107,9 +107,9 @@
     container.classList.remove('container')
 </script>
 
-<script>
+@*<script>
     onload = function () { setTimeout('location.reload (true)', 60000) }
-</script>
+</script>*@
 
 
 <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -136,3 +136,6 @@
         </form>
     </div>
 </div>
+
+
+<script src="~/js/site.js" asp-append-version="true"></script>

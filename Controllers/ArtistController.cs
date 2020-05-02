@@ -19,9 +19,11 @@ namespace OXG.CRM_System.Controllers
             db = context;
         }
 
-        public IActionResult Index()
+        [Authorize(Roles = "Артист")]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var artist = await db.Artists.Include(t => t.Missions).ThenInclude(m => m.Event).ThenInclude(m => m.Works).Where(t => t.Email == User.Identity.Name).FirstOrDefaultAsync();
+            return View(artist);
         }
 
         [Authorize(Roles = "Менеджер")]
@@ -38,6 +40,18 @@ namespace OXG.CRM_System.Controllers
         {
             var artist = await db.Artists.Where(t => t.Id == ArtistId).FirstOrDefaultAsync();
             var eventDb = await db.Events.Include(e => e.Artist).Include(e => e.Missions).Where(t => t.Id == eventId).FirstOrDefaultAsync();
+
+            var mission = new Mission()
+            {
+                Employeer = artist,
+                CreatedDate = DateTime.Now,
+                DeadLine = eventDb.DeadLine,
+                Event = eventDb,
+                MissionType = "Заказ",
+                MissionText = "Провести указанные мероприятия"
+            };
+
+            await db.Missions.AddAsync(mission);
 
             if (artist != null && eventDb != null)
             {

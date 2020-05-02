@@ -8,7 +8,7 @@ namespace OXG.CRM_System.ViewModels
 {
     public class CreateEventVM
     {
-        [Required(ErrorMessage ="Введите название мероприятия")]
+        [Required(ErrorMessage = "Введите название мероприятия")]
         public string EventName { get; set; }
 
         public DateTime CreatedDate { get; set; }
@@ -31,6 +31,7 @@ namespace OXG.CRM_System.ViewModels
         public string ClientName { get; set; }
 
         [Required(ErrorMessage = "Введите номер телефона клиента")]
+        [Phone]
         public string ClientPhone { get; set; }
 
         public string ClientEmail { get; set; }
