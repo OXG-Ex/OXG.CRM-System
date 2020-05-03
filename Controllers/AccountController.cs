@@ -37,7 +37,10 @@ namespace OXG.CRM_System.Controllers
             return RedirectToAction("Index","Home");
         }
 
-        
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
         public IActionResult Login()
         {

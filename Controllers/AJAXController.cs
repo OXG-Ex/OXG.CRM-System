@@ -82,11 +82,11 @@ namespace OXG.CRM_System.Controllers
             IQueryable<Notice> notices;
             if (!User.IsInRole("Администратор"))
             {
-                notices = db.Notices.Where(n => n.EmployeerId == id && !n.IsViewed);
+                notices = db.Notices.Where(n => n.EmployeerId == id);
             }
             else
             {
-                notices = db.Notices.Where(n => !n.IsViewed);
+                notices = db.Notices;
             }
             var model = new List<NoticeVM>();
             foreach (var item in notices)

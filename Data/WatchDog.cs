@@ -23,7 +23,7 @@ namespace OXG.CRM_System.Data
                     {
                         EmployeerId = item.EmployeerId,
                         EmployeerName = item.Employeer.Name,
-                        Text = "Провален дедлайн",
+                        Text = $"Провален дедлайн по <bold><a href=/Sight/Mission?id={item.Id}> задаче</a></bold> ",
                         MissionId = item.Id,
                         IsViewed = false,
                         Deadline = item.DeadLine
@@ -33,6 +33,19 @@ namespace OXG.CRM_System.Data
                 }
             }
 
+        }
+
+        public static async Task CloseEventAsync(CRMDbContext db)
+        {
+            var events = db.Events.Where(e => e.Status != "Закрыто");
+            foreach (var item in events)
+            {
+                if (item.DeadLine.Date > DateTime.Now.Date)
+                {
+                    item.Status = "Закрыто";
+                }
+            }
+            await db.SaveChangesAsync();
         }
 
         public static async Task FindNewRequestAsync(CRMDbContext db)

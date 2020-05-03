@@ -36,6 +36,13 @@
                             <h6 class="dropdown-item" data-toggle="modal" data-target="#NoticesModal" id="notices">Уведомления <span class="badge bg-danger badge-pill" id="noticeNum">0</span></h6>
                             <a class="dropdown-item" asp-action="Personal" asp-controller="Technic">Мой аккаунт</a>
                         }
+
+                        @if (User.IsInRole("Артист"))
+                        {
+                            <a class="dropdown-item" asp-action="Index" asp-controller="Artist">Рабочая зона</a>
+                            <h6 class="dropdown-item" data-toggle="modal" data-target="#NoticesModal" id="notices">Уведомления <span class="badge bg-danger badge-pill" id="noticeNum">0</span></h6>
+                            <a class="dropdown-item" asp-action="Personal" asp-controller="Artist">Мой аккаунт</a>
+                        }
                         <div class="dropdown-divider"></div>
                         <a class=" dropdown-item" asp-action="Logout" asp-controller="Account">Выход</a>
                     </div>
@@ -144,7 +151,12 @@
                         for (var i in data) {
                             var notice = data[i];
                             $('#loadImg').hide();
-                            $('#modalNotices').append('<div class="row"><div class="col-12" align="center"><div class="toast show" align="left" role="alert" aria-live="assertive" aria-atomic="true" style="width:inherit"><div class="toast-header"><strong class="mr-auto">' + notice.employeerName + '</strong><small>' + notice.agoTime + '</small></div><div class="toast-body">' + notice.text + ' по <bold><a href=/Sight/Mission?id=' + notice.missionId + ' > задаче</a></bold> ' + '</div></div></div></div><br/>');
+                            if (notice.viewed === true) {
+                                $('#viewedNotices').append('<div class="row"><div class="col-12" align="center"><div class="toast show" align="left" role="alert" aria-live="assertive" aria-atomic="true" style="width:inherit"><div class="toast-header"><strong class="mr-auto">' + notice.employeerName + '</strong><small>' + notice.agoTime + '</small></div><div class="toast-body">' + notice.text /*+ ' по <bold><a href=/Sight/Mission?id=' + notice.missionId + ' > задаче</a></bold> '*/ + '</div></div></div></div><br/>');
+                            }
+                            else {
+                                $('#modalNotices').append('<div class="row"><div class="col-12" align="center"><div class="toast show" align="left" role="alert" aria-live="assertive" aria-atomic="true" style="width:inherit"><div class="toast-header"><strong class="mr-auto">' + notice.employeerName + '</strong><small>' + notice.agoTime + '</small></div><div class="toast-body">' + notice.text /*+ ' по <bold><a href=/Sight/Mission?id=' + notice.missionId + ' > задаче</a></bold> '*/ + '</div></div></div></div><br/>');
+                            }
                         }
                         if (data.length === 0) {
                             $('#loadImg').hide();
@@ -164,8 +176,18 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" id="modalNotices">
+                <div class="modal-body">
                     <img src="~/images/loadGif2.gif" alt="Alternate Text" class="img-fluid" id="loadImg" />
+                    <div id="modalNotices">
+
+                    </div>
+                    <hr />
+                    <h6 class="text-muted">Просмотренные</h6>
+                    <hr />
+                    <div id="viewedNotices">
+
+
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="ViewedBtn">Просмотрено</button>

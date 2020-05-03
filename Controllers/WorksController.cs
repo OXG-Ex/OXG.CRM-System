@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace OXG.CRM_System.Controllers
             return View();
         }
 
+        [Authorize(Roles ="Менеджер")]
         public async Task<IActionResult> DeleteFromEvent(int id, int eid)
         {
             var eventDb = await db.Events.Include(e => e.Works).Where(e => e.Id == eid).FirstOrDefaultAsync();
@@ -33,6 +35,7 @@ namespace OXG.CRM_System.Controllers
             return RedirectToAction("View", "Events", new { id = eid });
         }
 
+        [Authorize(Roles = "Менеджер")]
         public async Task<IActionResult> AddToEvent(int id)
         {
             var eventDb = await db.Events.Include(e => e.Works).Where(e => e.Id == id).FirstOrDefaultAsync();
@@ -41,6 +44,7 @@ namespace OXG.CRM_System.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Менеджер")]
         public async Task<IActionResult> AddToEvent(int WorkId, int WorkNum, int EventID)
         {
             var eventDb = await db.Events.Include(e => e.Works).Where(e => e.Id == EventID).FirstOrDefaultAsync();

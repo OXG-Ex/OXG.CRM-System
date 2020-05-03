@@ -52,7 +52,7 @@
                     <tbody>
                         @foreach (var item in Model.Missions)
                         {
-                            if (!item.Event.Status.Contains("Ожидает согласования"))
+                            if (item.Event.Status.Contains("Согласовано"))
                             {
                                 <tr class="table-light">
                                     <td>@item.DeadLine.ToShortDateString()</td>
