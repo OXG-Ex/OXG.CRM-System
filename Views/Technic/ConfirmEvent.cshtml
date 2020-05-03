@@ -1,0 +1,39 @@
+﻿@model OXG.CRM_System.Models.Event
+@{
+    ViewData["Title"] = "Подтвердить мероприятие";
+}
+
+    <div class="card border-primary p-3">
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-3 col-form-label">Название:</label>
+            <div class="col-sm-9">
+                <input value="@Model.Name" readonly="" class="form-control-plaintext">
+            </div>
+        </div>
+        <hr />
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-3 col-form-label">Услуги:</label>
+            <div class="col-sm-9">
+                @foreach (var item in Model.Works)
+                {
+                    <input value="@item.Name" readonly="" class="form-control-plaintext">
+                }
+            </div>
+        </div>
+        <form method="post" asp-action="ConfirmEvent">
+            <div class="row">
+                <input type="number" name="eventId" hidden value="@Model.Id" />
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="ClientDescription">Сообщение для менеджера</label>
+                        <textarea name="managerMessage" class="form-control" id="ClientDescription" rows="3" placeholder="Введите сообщение..."></textarea>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <input type="submit" name="sub" class="btn btn-sm btn-outline-success btn-block" value="Подтвердить" />
+                    <hr />
+                    <input type="submit" name="sub" class="btn btn-sm btn-outline-danger btn-block" value="Отклонить" />
+                </div>
+            </div>
+        </form>
+    </div>

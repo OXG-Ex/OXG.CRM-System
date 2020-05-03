@@ -94,6 +94,14 @@ namespace OXG.CRM_System.Controllers
                 var notice = new NoticeVM(item);
                 model.Add(notice);
             }
+            if (model.Count>25)
+            {
+                var mod = model.TakeLast(25);
+                mod = mod.Reverse();
+
+                return new JsonResult(mod);
+            }
+            model.Reverse();
             return new JsonResult(model);
         }
 

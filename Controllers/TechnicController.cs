@@ -128,11 +128,52 @@ namespace OXG.CRM_System.Controllers
             return RedirectToAction("Personal", "Technic");
         }
 
+        [Authorize(Roles = "Техник")]
+        public async Task<IActionResult> ConfirmEvent(int id)
+        {
+            var evnt = await db.Events.Include(e => e.Works).Where(e => e.Id == id).FirstOrDefaultAsync();
+            return View(evnt);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Техник")]
-        public async Task<IActionResult> ConfirmEvent(Technic technic)
+        public async Task<IActionResult> ConfirmEvent(string sub, string managerMessage, int eventId)
         {
-            return View();
+            var evnt = await db.Events.Include(e => e.Works).Include(e => e.Manager).Include(e => e.Client).Include(e => e.Missions).Where(e => e.Id == eventId).FirstOrDefaultAsync();
+
+            if (sub == "Отклонить")
+            {
+                var mission = new Mission()
+                {
+                    CreatedDate = DateTime.Now,
+                    DeadLine = DateTime.Now.AddDays(2),
+                    MissionType = "Звонок",
+                    MissionText = $"Техник не согласовал проведение услуг. Сообщение:{managerMessage}",
+                    Employeer = evnt.Manager,
+                    Status = "Создано",
+                    Event = evnt,
+                };
+
+                await db.Missions.AddAsync(mission);
+            }
+            if (sub == "Подтвердить")
+            {
+                var contractMission = new Mission() 
+                { 
+                    Employeer = evnt.Manager,
+                    Event = evnt, 
+                    CreatedDate = DateTime.Now, 
+                    DeadLine = DateTime.Now.AddHours(48), 
+                    MissionType = "Договор", 
+                    MissionText = $"Создать договор для клиента '{evnt.Client.Name}' по мероприятию '{evnt.Name}'" 
+                };
+                evnt.Status = "Согласовано";
+                await db.Missions.AddAsync(contractMission);
+            }
+            var techMission = evnt.Missions.Where(m => m.MissionType.Contains("Согласование площадки")).FirstOrDefault();
+            techMission.Status = "Закрыто";
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index","Technic");
         }
     }
 }

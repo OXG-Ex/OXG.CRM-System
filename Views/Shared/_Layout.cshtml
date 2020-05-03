@@ -96,7 +96,7 @@
                 <strong>Обратите внимание:</strong> @ViewBag.WarningMessage.
             </div>
         }
-        <main role="main" class="pb-3">
+        <main role="main" @*class="pb-3"*@>
             @RenderBody()
         </main>
     </div>
@@ -125,7 +125,7 @@
     <!-- Скрипт подгрузки фото и уведомлений -->
     @if (User.Identity.IsAuthenticated)
     {
-        <script type="text/javascript">
+<script type="text/javascript">
         var jqxhr = $.get("/api/AJAX/GetUserPhoto?name=" +'@User.Identity.Name.ToString()');
         jqxhr.done(function (data) {
             $('#UserPhoto').attr("src", jqxhr.responseText);
@@ -135,14 +135,6 @@
             jqxh.done(function (data) {
                 $('#noticeNum').html(jqxh.responseText);
         });
-
-            $(function () {
-                $('#ViewedBtn').bind('click', function (e) {
-                    $.get("/api/AJAX/SetViewed?name=" + '@User.Identity.Name.ToString()');
-                    $('#modalNotices').html('');
-                    $('#noticeNum').html(0);
-                });
-            });
 
             $(function () {
                 $('#notices').bind('click', function (e) {
@@ -162,9 +154,11 @@
                             $('#loadImg').hide();
                         }
                     });
+                    $.get("/api/AJAX/SetViewed?name=" + '@User.Identity.Name.ToString()');
+                    $('#noticeNum').html(0);
                 });
             });
-        </script>
+</script>
     }
     <!-- Модальное окно уведомлений -->
     <div class="modal fade" id="NoticesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -188,9 +182,6 @@
 
 
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="ViewedBtn">Просмотрено</button>
                 </div>
             </div>
         </div>

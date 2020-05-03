@@ -64,7 +64,7 @@
                         {
                             @foreach (var item in Model.Missions)
                             {
-                                @if (item.Status != "Закрыто" && item.MissionType == "Заявка" || item.MissionType == "Автоматическая заявка")
+                                @if (item.Status != "Закрыто" && (item.MissionType == "Заявка" || item.MissionType == "Автоматическая заявка"))
                                 {
 
                                     <tr>

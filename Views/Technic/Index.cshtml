@@ -18,12 +18,15 @@
     <tbody>
         @foreach (var item in Model.Missions)
         {
-            <tr class="table-light">
-                <th><img class="img-fluid" width="40" height="40" src="@item.Picture" alt="picture" /></th>
-                <td>@item.MissionText</td>
-                <td><a asp-controller="Sight" asp-action="Client" asp-route-id="@item.Event.Client.Id" id="client">@item.Event.Client.Name</a></td>
-                <td><a asp-controller="Events" asp-action="View" asp-route-id="@item.Event.Id">@item.Event.Name</a></td>
-            </tr>
+            @if (item.Status != "Закрыто")
+            {
+                <tr class="table-light">
+                    <th><a asp-action="ConfirmEvent" asp-route-id="@item.Event.Id"><img class="img-fluid" width="40" height="40" src="@item.Picture" alt="picture" /></a></th>
+                    <td>@item.MissionText</td>
+                    <td><a asp-controller="Sight" asp-action="Client" asp-route-id="@item.Event.Client.Id" id="client">@item.Event.Client.Name</a></td>
+                    <td><a asp-controller="Events" asp-action="View" asp-route-id="@item.Event.Id">@item.Event.Name</a></td>
+                </tr>
+            }
         }
     </tbody>
 </table>
