@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +6,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Models;
 using OXG.CRM_System.Models.Employeers;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OXG.CRM_System.Controllers
 {
+    /// <summary>
+    /// Контроллер для сотрудника-техника
+    /// </summary>
     public class TechnicController : Controller
     {
         private readonly CRMDbContext db;
@@ -24,6 +26,10 @@ namespace OXG.CRM_System.Controllers
             _appEnvironment = appEnvironment;
         }
 
+        /// <summary>
+        /// Возвращает представление рабочей зоны техника
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = "Техник")]
         public async Task<IActionResult> Index()
         {
@@ -31,6 +37,10 @@ namespace OXG.CRM_System.Controllers
             return View(tech);
         }
 
+        /// <summary>
+        /// Возвращает страницу личного кабинета
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = "Техник")]
         public async Task<IActionResult> Personal()
         {
@@ -38,12 +48,20 @@ namespace OXG.CRM_System.Controllers
             return View(tech);
         }
 
+        /// <summary>
+        /// представление для загрузки нового изображения профиля
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ChangePhoto()
         {
             return View();
         }
 
-
+        /// <summary>
+        /// Метод сохраняющий новую фотографию пользователя
+        /// </summary>
+        /// <param name="uploadedFile">Загружаемая фотография</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ChangePhoto(IFormFile uploadedFile)
         {
@@ -54,7 +72,7 @@ namespace OXG.CRM_System.Controllers
                 {
                     await uploadedFile.CopyToAsync(fileStream);
                 }
-                var user = await db.Managers.FirstOrDefaultAsync(e => e.UserName == User.Identity.Name);
+                var user = await db.Technics.FirstOrDefaultAsync(e => e.UserName == User.Identity.Name);
                 user.Photo = path;
                 await db.SaveChangesAsync();
 
@@ -63,16 +81,27 @@ namespace OXG.CRM_System.Controllers
             return Content("Некорректный файл");
         }
 
+        /// <summary>
+        /// Возвращает представление для указания техника мероприятия
+        /// </summary>
+        /// <param name="id">Id мероприятия</param>
+        /// <returns></returns>
         [Authorize(Roles = "Менеджер")]
         public IActionResult AddToEvent(int id)
         {
-            ViewBag.Technics = new SelectList(db.Technics,"Id","Name");
+            ViewBag.Technics = new SelectList(db.Technics, "Id", "Name");
             ViewBag.EventId = id;
             return View();
         }
 
+        /// <summary>
+        /// Добавляет техника к мероприятию
+        /// </summary>
+        /// <param name="TechnicId">Id Техника</param>
+        /// <param name="eventId">Id мероприятия</param>
+        /// <returns></returns>
         [HttpPost]
-        [Authorize(Roles ="Менеджер")]
+        [Authorize(Roles = "Менеджер")]
         public async Task<IActionResult> AddToEvent(string TechnicId, int eventId)
         {
             var technic = await db.Technics.Where(t => t.Id == TechnicId).FirstOrDefaultAsync();
@@ -114,9 +143,14 @@ namespace OXG.CRM_System.Controllers
                 }
             }
             await db.SaveChangesAsync();
-            return RedirectToAction("Index","Manager");
+            return RedirectToAction("Index", "Manager");
         }
 
+        /// <summary>
+        /// Сохранение изменений в аккаунте пользователя
+        /// </summary>
+        /// <param name="technic">Модель техника полученная из представления</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SaveChanges(Technic technic)
         {
@@ -128,6 +162,11 @@ namespace OXG.CRM_System.Controllers
             return RedirectToAction("Personal", "Technic");
         }
 
+        /// <summary>
+        /// Возвращает представление для подтверждения/отклонения мероприятия
+        /// </summary>
+        /// <param name="id">Id мероприятия</param>
+        /// <returns></returns>
         [Authorize(Roles = "Техник")]
         public async Task<IActionResult> ConfirmEvent(int id)
         {
@@ -135,6 +174,13 @@ namespace OXG.CRM_System.Controllers
             return View(evnt);
         }
 
+        /// <summary>
+        /// Сохраняет ответ техника касаемо подтверждения/отклонения мероприятия
+        /// </summary>
+        /// <param name="sub">Заключение техника</param>
+        /// <param name="managerMessage">Сообщение для менеджера</param>
+        /// <param name="eventId">Id мероприятия</param>
+        /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "Техник")]
         public async Task<IActionResult> ConfirmEvent(string sub, string managerMessage, int eventId)
@@ -158,14 +204,14 @@ namespace OXG.CRM_System.Controllers
             }
             if (sub == "Подтвердить")
             {
-                var contractMission = new Mission() 
-                { 
+                var contractMission = new Mission()
+                {
                     Employeer = evnt.Manager,
-                    Event = evnt, 
-                    CreatedDate = DateTime.Now, 
-                    DeadLine = DateTime.Now.AddHours(48), 
-                    MissionType = "Договор", 
-                    MissionText = $"Создать договор для клиента '{evnt.Client.Name}' по мероприятию '{evnt.Name}'" 
+                    Event = evnt,
+                    CreatedDate = DateTime.Now,
+                    DeadLine = DateTime.Now.AddHours(48),
+                    MissionType = "Договор",
+                    MissionText = $"Создать договор для клиента '{evnt.Client.Name}' по мероприятию '{evnt.Name}'"
                 };
                 evnt.Status = "Согласовано";
                 await db.Missions.AddAsync(contractMission);
@@ -173,7 +219,7 @@ namespace OXG.CRM_System.Controllers
             var techMission = evnt.Missions.Where(m => m.MissionType.Contains("Согласование площадки")).FirstOrDefault();
             techMission.Status = "Закрыто";
             await db.SaveChangesAsync();
-            return RedirectToAction("Index","Technic");
+            return RedirectToAction("Index", "Technic");
         }
     }
 }

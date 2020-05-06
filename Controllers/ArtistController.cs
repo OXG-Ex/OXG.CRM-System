@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +6,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Models;
 using OXG.CRM_System.Models.Employeers;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OXG.CRM_System.Controllers
 {
+    /// <summary>
+    /// Контроллер для сотрудников работающих непосредственно на мероприятии
+    /// </summary>
     public class ArtistController : Controller
     {
         private readonly CRMDbContext db;
@@ -24,13 +26,20 @@ namespace OXG.CRM_System.Controllers
             _appEnvironment = appEnvironment;
         }
 
+        /// <summary>
+        /// Возвращает страницу с текущими мероприятиями
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = "Артист")]
         public async Task<IActionResult> Index()
         {
             var artist = await db.Artists.Include(t => t.Missions).ThenInclude(m => m.Event).ThenInclude(m => m.Works).Where(t => t.Email == User.Identity.Name).FirstOrDefaultAsync();
             return View(artist);
         }
-
+        /// <summary>
+        /// Возвращает страницу личного кабинета
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = "Артист")]
         public async Task<IActionResult> Personal()
         {
@@ -38,11 +47,21 @@ namespace OXG.CRM_System.Controllers
             return View(artist);
         }
 
+        /// <summary>
+        /// представление для загрузки нового изображения профиля
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Артист")]
         public IActionResult ChangePhoto()
         {
             return View();
         }
 
+        /// <summary>
+        /// Метод сохранения изменений личных данных 
+        /// </summary>
+        /// <param name="artist"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SaveChanges(Artist artist)
         {
@@ -54,9 +73,15 @@ namespace OXG.CRM_System.Controllers
             return RedirectToAction("Personal", "Artist");
         }
 
+        /// <summary>
+        /// Метод сохраняющий новую фотографию пользователя
+        /// </summary>
+        /// <param name="uploadedFile">Загружаемая фотография</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ChangePhoto(IFormFile uploadedFile)
         {
+            //Проверка типа файла
             if (uploadedFile != null && uploadedFile.ContentType.Contains("image"))
             {
                 var path = "/AccountPhotos/" + uploadedFile.FileName;
@@ -64,7 +89,7 @@ namespace OXG.CRM_System.Controllers
                 {
                     await uploadedFile.CopyToAsync(fileStream);
                 }
-                var user = await db.Managers.FirstOrDefaultAsync(e => e.UserName == User.Identity.Name);
+                var user = await db.Artists.FirstOrDefaultAsync(e => e.UserName == User.Identity.Name);
                 user.Photo = path;
                 await db.SaveChangesAsync();
 
@@ -73,6 +98,11 @@ namespace OXG.CRM_System.Controllers
             return Content("Некорректный файл");
         }
 
+        /// <summary>
+        /// Возвращает представление для добавления артиста в качестве ответственного к мероприятию
+        /// </summary>
+        /// <param name="id">id мероприятия</param>
+        /// <returns>Представление</returns>
         [Authorize(Roles = "Менеджер")]
         public IActionResult AddToEvent(int id)
         {
@@ -81,6 +111,12 @@ namespace OXG.CRM_System.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Добавляет артиста в мероприятие
+        /// </summary>
+        /// <param name="ArtistId">id артиста</param>
+        /// <param name="eventId">id мероприятия</param>
+        /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "Менеджер")]
         public async Task<IActionResult> AddToEvent(string ArtistId, int eventId)
@@ -88,6 +124,7 @@ namespace OXG.CRM_System.Controllers
             var artist = await db.Artists.Where(t => t.Id == ArtistId).FirstOrDefaultAsync();
             var eventDb = await db.Events.Include(e => e.Artist).Include(e => e.Missions).Where(t => t.Id == eventId).FirstOrDefaultAsync();
 
+            //новое задание для артиста
             var mission = new Mission()
             {
                 Employeer = artist,
@@ -98,6 +135,7 @@ namespace OXG.CRM_System.Controllers
                 MissionText = "Провести указанные мероприятия"
             };
 
+            //уведомление артиста о новом задании
             var notice = new Notice()
             {
                 EmployeerName = artist.Name,

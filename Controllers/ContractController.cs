@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting.Internal;
 using OXG.CRM_System.Data;
 using OXG.CRM_System.Models;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using TemplateEngine.Docx;
 
 namespace OXG.CRM_System.Controllers
 {
+    /// <summary>
+    /// Контроллер отвечающий за работу с договорами
+    /// </summary>
+    [Authorize]
     public class ContractController : Controller
     {
         private readonly CRMDbContext db;
@@ -28,6 +31,11 @@ namespace OXG.CRM_System.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Отправляет email, с договором об оказании услуг клиенту
+        /// </summary>
+        /// <param name="id">Id мероприятия</param>
+        /// <returns></returns>
         public async Task<IActionResult> SendToEmail(int id)
         {
             var eventDb = await db.Events.Include(e => e.Contract).Include(e => e.Manager).Include(e => e.Missions).Include(e => e.Client).Where(e => e.Id == id).FirstOrDefaultAsync();
@@ -40,8 +48,8 @@ namespace OXG.CRM_System.Controllers
             {
                 return View("IncorrectEmail");
             }
-            await EmailService.SendEmailAsync(eventDb.Client.Email,"Договор",$"Высылаю вам договор об оказании услуг на вашем мероприятии, ознакомьтесь с ним и в случае отсутствия вопросов жду вас завтра в нашем офисе для подписания. По всем вопросам можете обращаться на этот адрес или по телефону {eventDb.Manager.PhoneNumber}", eventDb.Contract.Path);
-            ViewBag.SendToAdress = eventDb.Client.Email; 
+            await EmailService.SendEmailAsync(eventDb.Client.Email, "Договор", $"Высылаю вам договор об оказании услуг на вашем мероприятии, ознакомьтесь с ним и в случае отсутствия вопросов жду вас в нашем офисе для подписания. По всем вопросам можете обращаться на этот адрес или по телефону {eventDb.Manager.PhoneNumber}", eventDb.Contract.Path);
+            ViewBag.SendToAdress = eventDb.Client.Email;
             ViewBag.ClientName = eventDb.Client.Name;
             ViewBag.ContractName = eventDb.Contract.Name;
 
@@ -51,6 +59,12 @@ namespace OXG.CRM_System.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Генерирует договор для мероприятия со списком услуг
+        /// </summary>
+        /// <param name="id">Id мероприятия</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Менеджер")]
         public async Task<IActionResult> Create(int id)
         {
             var pathTemplate = appEnvironment.ContentRootPath + "\\wwwroot\\files\\template.docx";
@@ -78,7 +92,7 @@ namespace OXG.CRM_System.Controllers
             }
 
             var valuesToFill = new Content(new FieldContent("docDate", DateTime.Now.ToShortDateString()),
-                                           new FieldContent("docNum",$"{eventDb.Id}" ),
+                                           new FieldContent("docNum", $"{eventDb.Id}"),
                                            new FieldContent("EventTotalPrice", $"{eventDb.TotalPrice}"),
                                            new FieldContent("docClient", $"{eventDb.Client.Name}"),
                                            workTable);
@@ -90,9 +104,9 @@ namespace OXG.CRM_System.Controllers
                 outputDocument.SaveChanges();
             }
 
-            
 
-            var contract =  new Contract() { Event = eventDb, Manager = eventDb.Manager, Name = filename, CreatedDate = DateTime.Now, Client = eventDb.Client, Path = $"\\files\\contracts\\{filename}" };
+
+            var contract = new Contract() { Event = eventDb, Manager = eventDb.Manager, Name = filename, CreatedDate = DateTime.Now, Client = eventDb.Client, Path = $"\\files\\contracts\\{filename}" };
 
             await db.AddAsync(contract);
             await db.SaveChangesAsync();
@@ -111,7 +125,7 @@ namespace OXG.CRM_System.Controllers
             var mission = eventDb.Missions.Where(m => m.MissionText.Contains("Создать договор")).FirstOrDefault();
             mission.Status = "Закрыто";
             await db.SaveChangesAsync();
-            return RedirectToAction("Index","Manager");
+            return RedirectToAction("Index", "Manager");
         }
     }
 }

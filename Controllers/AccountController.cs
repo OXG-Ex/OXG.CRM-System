@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Models;
 using OXG.CRM_System.Models.Employeers;
 using OXG.CRM_System.ViewModels;
+using System.Threading.Tasks;
 
 namespace OXG.CRM_System.Controllers
 {
+    /// <summary>
+    /// Контроллер ответственный за работу с аккаунтами 
+    /// </summary>
     public class AccountController : Controller
     {
         private readonly CRMDbContext db;
@@ -34,7 +31,7 @@ namespace OXG.CRM_System.Controllers
             {
                 return RedirectToAction("Login");
             }
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult AccessDenied()
@@ -47,8 +44,9 @@ namespace OXG.CRM_System.Controllers
             return View();
         }
 
-        public async Task <IActionResult> Logout()
+        public async Task<IActionResult> Logout()
         {
+            //Удаление аутентификационных куки
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
@@ -88,7 +86,7 @@ namespace OXG.CRM_System.Controllers
                 switch (model.UserType)
                 {
                     case "Менеджер":
-                        user = new Manager() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo= "/images/defaultPhoto.png" };
+                        user = new Manager() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo = "/images/defaultPhoto.png" };
                         break;
                     case "Техник":
                         user = new Technic() { Name = model.Name, UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Photo = "/images/defaultPhoto.png" };

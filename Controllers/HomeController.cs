@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OXG.CRM_System.Data;
 using OXG.CRM_System.Models;
-using OXG.CRM_System.ViewModels;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace OXG.CRM_System.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -31,9 +25,9 @@ namespace OXG.CRM_System.Controllers
 
         public async Task<IActionResult> Index()
         {
-            await DbInitializer.InitializeAsync(userManager, roleManager, db);
-            await WatchDog.FindDeadlineAsync(db);
-            await WatchDog.FindNewRequestAsync(db);
+            await DbInitializer.InitializeAsync(userManager, roleManager, db);//Инициализация БД
+            await WatchDog.FindDeadlineAsync(db);//Вызов метода поиска про*баных дедлайнов
+            await WatchDog.FindNewRequestAsync(db);//Вызов метода поиска новых задач, на основе уже проводившихся мероприятий
             await db.SaveChangesAsync();
             return View();
         }

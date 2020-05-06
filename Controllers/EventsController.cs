@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Data;
 using OXG.CRM_System.Models;
 using OXG.CRM_System.ViewModels;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OXG.CRM_System.Controllers
 {
+    /// <summary>
+    /// Контроллер ответственный за работу с мероприятиями
+    /// </summary>
     [Authorize]
     public class EventsController : Controller
     {
@@ -22,19 +23,24 @@ namespace OXG.CRM_System.Controllers
             db = context;
         }
 
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
+        /// <summary>
+        /// Возвращает представление для создания нового мероприятия
+        /// </summary>
+        /// <param name="FromRequest"></param>
+        /// <returns></returns>
         public IActionResult New(bool? FromRequest)
-        {//TODO: добавить выбор клиента из БД
+        {
             ViewBag.EventTypes = StaticValues.GetEventTypes();
             ViewBag.FromRequest = FromRequest;
             return View();
         }
 
+        /// <summary>
+        /// Возвращает представление для просмотра информации о мероприятии
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="missionId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> View(int id, int? missionId)
         {
             var eventDb = await db.Events.Include(e => e.Client)
@@ -50,10 +56,15 @@ namespace OXG.CRM_System.Controllers
                 var mission = await db.Missions.Where(e => e.Id == missionId).FirstOrDefaultAsync();
                 ViewBag.Message = $"{mission.MissionText}";
             }
-            
+
             return View(eventDb);
         }
 
+        /// <summary>
+        /// Создает новое мероприятие на основе заполненной модели
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Менеджер")]
         [HttpPost]
         public async Task<IActionResult> New(CreateEventVM model)
@@ -64,7 +75,7 @@ namespace OXG.CRM_System.Controllers
                 var clientDb = await db.Clients.Where(c => c.Name == model.ClientName).FirstOrDefaultAsync();
                 if (clientDb == null)
                 {
-                   clientDb = new Client(model);
+                    clientDb = new Client(model);
                 }
                 clientDb.Description = model.ClientDescription;
                 var manager = await db.Managers.Where(e => e.Email == User.Identity.Name).FirstOrDefaultAsync();
@@ -90,16 +101,16 @@ namespace OXG.CRM_System.Controllers
 
                 await db.AddAsync(workMission);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index","Manager");
+                return RedirectToAction("Index", "Manager");
             }
             else
             {
-                ModelState.AddModelError("","Заполните все поля");
+                ModelState.AddModelError("", "Заполните все поля");
                 ViewBag.EventTypes = StaticValues.GetEventTypes();
                 ViewBag.FromRequest = model.FromRequest;
                 return View();
             }
-            
+
         }
     }
 }

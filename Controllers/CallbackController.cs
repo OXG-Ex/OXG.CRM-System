@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using OXG.CRM_System.Data;
 using OXG.CRM_System.Models;
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using VkNet.Abstractions;
 using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
@@ -19,7 +17,7 @@ using VkNet.Utils;
 namespace OXG.CRM_System.Controllers
 {
     /// <summary>
-    /// Контроллер Бота ВК, реагирует на присылаемые JSON объекты
+    /// Контроллер Бота ВК, реагирует на присылаемые JSON объекты по адресу api/callback 
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -30,10 +28,11 @@ namespace OXG.CRM_System.Controllers
         /// </summary>
         private readonly IConfiguration _configuration;
 
-        private readonly IVkApi _vkApi;
+        private readonly IVkApi _vkApi;//Поле для работы с АПИ ВКонтакта
 
         private readonly CRMDbContext db;
 
+        //Внедрение зависимостей
         public CallbackController(IVkApi vkApi, IConfiguration configuration, CRMDbContext context)
         {
             _vkApi = vkApi;
@@ -47,6 +46,11 @@ namespace OXG.CRM_System.Controllers
             return Content("Проверка страницы");
         }
 
+        /// <summary>
+        /// Основной метод работающий с клиентом
+        /// </summary>
+        /// <param name="updates"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Callback([FromBody] VK_Updates updates)
         {
@@ -54,6 +58,7 @@ namespace OXG.CRM_System.Controllers
             {
                 ///Если вервер запрашивает подтверждение
                 case "confirmation":
+                    //Возвращается строка указанная в appsettings.json/Config/Confirmation
                     return Ok(_configuration["Config:Confirmation"]);
 
                 case "message_new":
@@ -99,7 +104,8 @@ namespace OXG.CRM_System.Controllers
                         //получение пользователя от ВК по id
                         var user = _vkApi.Users.Get(new long[] { (long)msg.FromId }, VkNet.Enums.Filters.ProfileFields.Contacts).FirstOrDefault();
                         //Поиск клиента в БД
-                        var userVk = await db.ClientsVK.Include(u => u.Client).Include(u => u.Client.Manager).Where(u => u.VkId == (long)msg.FromId).FirstOrDefaultAsync();
+                        var userVk = await db.ClientsVK.Include(u => u.Client).Include(u => u.Client.Manager).Where(u => u.VkId == msg.FromId).FirstOrDefaultAsync();
+                        //Если не существует такого клиента в БД
                         if (userVk == null)
                         {
                             //Создание нового ВК-клиента
@@ -107,7 +113,7 @@ namespace OXG.CRM_System.Controllers
                             {
                                 Branch = "Our client?",
                                 Stage = "Yes/No",
-                               // Client = await db.Clients.Where(c => c.Name == "Temp").FirstAsync()
+                                // Client = await db.Clients.Where(c => c.Name == "Temp").FirstAsync()
                             };
                             await db.ClientsVK.AddAsync(userVk);
                             await db.SaveChangesAsync();
@@ -116,9 +122,9 @@ namespace OXG.CRM_System.Controllers
                         }
                         else
                         {//TODO: Добавить переход вверх по ветке. Добавить дефаулты и обработку неправильных ответов.(частично сделано). 
-                            //TODO:Добавить контроль кол-ва вк-аккаунтов у пользователя, обработку новых ивентов, отзывов. приветствие по имени. 
-                            ////!!!!!!!!!ПРОКОММЕНТИРОВАТЬ ВЕСЬ КОЛБЭК КОНТРОЛЛЕР!!!!!!!!!!!!!!!!!
-                            
+                         //TODO:Добавить контроль кол-ва вк-аккаунтов у пользователя, обработку новых ивентов, отзывов. приветствие по имени. 
+                         ////!!!!!!!!!ПРОКОММЕНТИРОВАТЬ ВЕСЬ КОЛБЭК КОНТРОЛЛЕР!!!!!!!!!!!!!!!!!
+
                             ///Сброс всех ветвей и стадий, для тестирования
                             if (msg.Text == "/RETURN/")
                             {
@@ -141,6 +147,7 @@ namespace OXG.CRM_System.Controllers
                             //переключение по веткам
                             switch (userVk.Branch)
                             {
+                                //Ветка выяснения, является ли пользователь клиентом агентства
                                 case "Our client?":
                                     switch (userVk.Stage)
                                     {
@@ -163,7 +170,7 @@ namespace OXG.CRM_System.Controllers
                                             responseText = "Я вас не понимаю, пожалуйста используйте для ответов кнопки. Вы являетесь нашим клиентом ?";
                                             keyboard = kbdYesNo;
                                             break;
-
+                                        //Поиск клиента агенства по номеру телефона
                                         case "Give me your phone":
                                             var tempClient = await db.Clients.Include(c => c.Manager).Include(c => c.ClientVK).Include(c => c.Events).Where(c => c.Phone == msg.Text).FirstOrDefaultAsync();
                                             if (tempClient == null)
@@ -286,7 +293,7 @@ namespace OXG.CRM_System.Controllers
                                                     responseText = $"Контакты вашего менеджера:\n Электронная почта:{userVk.Client.Manager.Email}\n Телефонный номер:{userVk.Client.Manager.PhoneNumber}\n ВК:{userVk.Client.Manager.VkAdress}\n Телеграмм:{userVk.Client.Manager.TgAdress}";
                                                     keyboard = kbdForClient;
                                                     break;
-
+                                                //Возвращает информацию об услуге если она есть в БД
                                                 default:
                                                     if ((db.Works.Select(e => e.Name)).Contains(msg.Text))
                                                     {
@@ -310,22 +317,23 @@ namespace OXG.CRM_System.Controllers
                                 case "CallMe":
                                     switch (userVk.Stage)
                                     {
+                                        //Получение номера телефона
                                         case "1":
                                             if (Regex.IsMatch(msg.Text, @"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$", RegexOptions.IgnoreCase))
                                             {
-                                                var mission = new Mission() { CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(3), MissionType ="Заявка", MissionText = $"Заявка на звонок. Номер телефона: {msg.Text}", Status =$"{userVk.VkId}", Event = await db.Events.Where(e => e.Name=="TempEvent").FirstOrDefaultAsync() };
+                                                var mission = new Mission() { CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(3), MissionType = "Заявка", MissionText = $"Заявка на звонок. Номер телефона: {msg.Text}", Status = $"{userVk.VkId}", Event = await db.Events.Where(e => e.Name == "TempEvent").FirstOrDefaultAsync() };
                                                 userVk.Stage = "2";
                                                 responseText = "Отлично! Теперь опишите суть своего вопроса";
                                                 await db.Missions.AddAsync(mission);
                                                 await db.SaveChangesAsync();
-                                                
+
                                             }
                                             else
                                             {
                                                 responseText = "Введённый номер не соответствует формату телефонных номеров, проверьте правильность введённого номера";
                                             }
                                             break;
-
+                                        //Создание заявки для менеджера
                                         case "2":
                                             var missiondb = await db.Missions.Where(m => m.Status == $"{userVk.VkId}").FirstOrDefaultAsync();
                                             var min = 9999999;
@@ -334,7 +342,7 @@ namespace OXG.CRM_System.Controllers
                                             {
                                                 if (item.Missions.Count() < min)
                                                 {
-                                                   ident = item.Id;
+                                                    ident = item.Id;
                                                 }
                                             }
                                             var manager = await db.Managers.Where(m => m.Id == ident).FirstOrDefaultAsync();
@@ -349,18 +357,27 @@ namespace OXG.CRM_System.Controllers
                                             break;
                                     }
                                     break;
-                                
+
                                 //Ветвь заявки на новое мероприятие
                                 case "newEvent":
                                     switch (userVk.Stage)
                                     {
                                         case "1":
-                                            var mission = new Mission() { CreatedDate = DateTime.Now, DeadLine = DateTime.Now.AddHours(24), Event = await db.Events.Where(e => e.Name == "TempEvent").FirstOrDefaultAsync(), MissionType = "Заявка", Status = $"{userVk.VkId}", MissionText =$"Заявка на проведение мероприятия. Дата и время: {msg.Text}" };
+                                            var mission = new Mission()
+                                            {
+                                                CreatedDate = DateTime.Now,
+                                                DeadLine = DateTime.Now.AddHours(24),
+                                                Event = await db.Events.Where(e => e.Name == "TempEvent").FirstOrDefaultAsync(), //Установка временного мероприятия дабы избежать исключения
+                                                MissionType = "Заявка",
+                                                Status = $"{userVk.VkId}",
+                                                MissionText = $"Заявка на проведение мероприятия. Дата и время: {msg.Text}"
+                                            };
                                             await db.Missions.AddAsync(mission);
                                             await db.SaveChangesAsync();
                                             userVk.Stage = "2";
                                             responseText = "Введите описание вашего мероприятия и номер телефона для связи, иначе связь будет осуществляться через личные сообщения ВК";
                                             break;
+                                        //Сохранение описание и контактов клиента, установка менеджера с минимальным числом заданий
                                         case "2":
                                             var min = 9999999;
                                             var ident = "";
@@ -379,7 +396,7 @@ namespace OXG.CRM_System.Controllers
                                             missionDb.Employeer = manager;
                                             await db.SaveChangesAsync();
                                             userVk.Branch = "Main";
-                                            
+
                                             if (userVk.Client != null)
                                             {
                                                 keyboard = kbdForClient;

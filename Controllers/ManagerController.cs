@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +6,16 @@ using Microsoft.EntityFrameworkCore;
 using OXG.CRM_System.Data;
 using OXG.CRM_System.Models;
 using OXG.CRM_System.Models.Employeers;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace OXG.CRM_System.Controllers
 {
+    /// <summary>
+    /// Контроллер для сотрудника-менеджера
+    /// </summary>
     [Authorize(Roles = "Менеджер")]
     public class ManagerController : Controller
     {
@@ -26,6 +27,10 @@ namespace OXG.CRM_System.Controllers
             _appEnvironment = appEnvironment;
         }
 
+        /// <summary>
+        /// Возвращает представление основной рабочей зоны менеджера с мероприятиями/заявками/задачами
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             await WatchDog.FindDeadlineAsync(db);
@@ -42,7 +47,7 @@ namespace OXG.CRM_System.Controllers
                     item.Status = "Дедлайн провален";
                     continue;
                 }
-                if (item.LeftTime.TotalHours < 2  && item.Status != "Закрыто")
+                if (item.LeftTime.TotalHours < 2 && item.Status != "Закрыто")
                 {
                     item.Status = "Дедлайн близок к провалу";
                     warNum++;
@@ -52,12 +57,20 @@ namespace OXG.CRM_System.Controllers
             return View(user);
         }
 
+        /// <summary>
+        /// представление для загрузки нового изображения профиля
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ChangePhoto()
         {
             return View();
         }
 
-
+        /// <summary>
+        /// Метод сохраняющий новую фотографию пользователя
+        /// </summary>
+        /// <param name="uploadedFile">Загружаемая фотография</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ChangePhoto(IFormFile uploadedFile)
         {
@@ -72,11 +85,15 @@ namespace OXG.CRM_System.Controllers
                 user.Photo = path;
                 await db.SaveChangesAsync();
 
-                return RedirectToAction("Personal","Manager");
+                return RedirectToAction("Personal", "Manager");
             }
             return Content("Некорректный файл");
         }
 
+        /// <summary>
+        /// Возвращает страницу личного кабинета
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Personal(string Id)
         {
             var user = new Manager();
@@ -91,6 +108,11 @@ namespace OXG.CRM_System.Controllers
             return View(user);
         }
 
+        /// <summary>
+        /// Сохранение изменений в аккаунте пользователя
+        /// </summary>
+        /// <param name="manager">Модель менеджера полученная из представления</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SaveChanges(Manager manager)
         {
@@ -101,7 +123,7 @@ namespace OXG.CRM_System.Controllers
             temp.VkAdress = manager.VkAdress;
             temp.TgAdress = manager.TgAdress;
             await db.SaveChangesAsync();
-            return RedirectToAction("Personal","Manager");
+            return RedirectToAction("Personal", "Manager");
         }
     }
 }
