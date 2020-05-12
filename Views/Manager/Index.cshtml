@@ -12,7 +12,7 @@
 </style>
 
 
-<div class="row">
+<div class="row" style="margin-left:0px; margin-right:0px;">
     <div class=" col-lg-6">
         <a asp-action="New" asp-controller="Events" type="button" class="btn btn-success btn-lg btn-block">Создать мероприятие</a>
         <div class="card border-success mb-3 ">
@@ -85,12 +85,12 @@
 
 
 
-<div class="row" style="margin-left: 1%; ">
+<div class="row" style="margin-left: 1%; margin-right:0px;">
     @foreach (var item in Model.Missions)
     {
         if (item.MissionType != "Заявка" && item.MissionType != "Автоматическая заявка" && item.Status != "Закрыто")
         {
-            <div class="card border-info mb-3" style="max-width: 20rem;" title="@item.Status" id="line_block">
+            <div class="card border-info mb-3" style="max-width: 22rem;" title="@item.Status" id="line_block">
                 <div class="card-header"><img src="@item.Picture" alt="type" width="28" height="28" /> </div>
                 <div class="card-body">
                     <h4 class="card-title">@item.MissionType</h4>
