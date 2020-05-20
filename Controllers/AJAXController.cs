@@ -145,14 +145,17 @@ namespace OXG.CRM_System.Controllers
         {
             var user = await db.Employeers.Where(u => u.Email == name).FirstOrDefaultAsync();
             var id = user.Id;
-            int notices;
-            if (!User.IsInRole("Администратор"))
+            var notices = 0;
+            if (User!= null)
             {
-                notices = await db.Notices.Where(n => n.EmployeerId == id && !n.IsViewed).CountAsync();
-            }
-            else
-            {
-                notices = await db.Notices.Where(n => !n.IsViewed).CountAsync();
+                if (!User.IsInRole("Администратор"))
+                {
+                    notices = await db.Notices.Where(n => n.EmployeerId == id && !n.IsViewed).CountAsync();
+                }
+                else
+                {
+                    notices = await db.Notices.Where(n => !n.IsViewed).CountAsync();
+                }
             }
             return Content(notices.ToString());
         }
