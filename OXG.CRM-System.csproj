@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="OXG.CRM-System.Tests\**" />
+    <Content Remove="OXG.CRM-System.Tests\**" />
+    <EmbeddedResource Remove="OXG.CRM-System.Tests\**" />
+    <None Remove="OXG.CRM-System.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FontAwesome" Version="4.7.0" />
     <PackageReference Include="MailKit" Version="2.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
