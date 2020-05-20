@@ -59,9 +59,10 @@ namespace OXG.CRM_System.Data
             return new SelectList(MissionTypes);
         }
 
-        public static string EmailLogin { get; set; } = "semes212@gmail.com";
-        public static string EmailPassword { get; set; } = "Kipelov21";
-        public static string CompanyName { get; set; } = "ООО Рога и Копыта";
+        //Настройки Email
+        public static string EmailLogin { get; set; } = "test@gmail.com";//Адрес с которого будут отправляться Email
+        public static string EmailPassword { get; set; } = ""; //Пароль от аккаунта почты
+        public static string CompanyName { get; set; } = "ООО Рога и Копыта";//Название предприятия
 
     }
 }

@@ -28,7 +28,7 @@ namespace OXG.CRM_System.Data
 
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync("smtp.gmail.com", 587, false); //либо использум порт 465 587
+                await client.ConnectAsync("smtp.gmail.com", 587, false); //используем порт 465 или 587
                 await client.AuthenticateAsync(StaticValues.EmailLogin, StaticValues.EmailPassword); //логин-пароль от аккаунта
                 await client.SendAsync(emailMessage);
 
